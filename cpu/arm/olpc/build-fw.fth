@@ -981,6 +981,24 @@ dev /client-services  patch noop visible enter  dend
    quit
 ;
 
+[ifdef] olpc-cl4
+: deploy-android
+   " ia" find-tag  0=  if
+      " "(00)" " ia" $add-tag
+      begin wfi again
+   then
+   2drop
+;
+
+: deploy-linux
+   " ia" find-tag  if
+      2drop
+      " ia" $delete-tag
+      begin wfi again
+   then
+;
+[then]
+
 : enable-serial ;
 fload ${BP}/cpu/x86/pc/olpc/terminal.fth   \ Serial terminal emulator
 fload ${BP}/cpu/x86/pc/olpc/apt.fth        \ Common developer utilities

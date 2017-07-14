@@ -1320,7 +1320,7 @@ alias ?ec-update noop immediate
 
    load-crypto  if  " Crypto load failed" .security-failure   then       ( )
 
-   alternate?  if
+   alternate?  " ia" find-tag  dup  if  nip nip  then  xor  if
       [ifdef] mmp3  true to no-mmp3-gic?  [then]
       " \boot-alt"
    else
