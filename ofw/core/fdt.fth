@@ -183,7 +183,7 @@ variable fdt-phandle
    then                             ( adr,len #ints )
    drop                             ( adr,len )
 
-   to-display-column  h# 10 min  cdump                             ( )
+   to-display-column  h# 10 min  cdump cr                          ( )
 ;
 : .fdt-property  ( -- )
    [ also hidden ] indent [ previous ]
