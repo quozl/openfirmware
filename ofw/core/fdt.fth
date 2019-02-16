@@ -138,7 +138,7 @@ variable fdt-phandle
    0 peer  flatten-node  
    9 fdt,            \ OF_DT_END
 
-\  fdt-ptr  fdt h# 80 +  -  fdt h# 24 +  be-l!  \ Set struct size
+   fdt-ptr  fdt h# 80 +  -  fdt h# 24 +  be-l!  \ Set struct size
    fdt-strings-len          fdt h# 20 +  be-l!  \ Set strings size
 
    fdt-ptr /fdt-align round-up  to fdt-ptr
