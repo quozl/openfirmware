@@ -24,6 +24,7 @@ h# 10.0000 constant /rom           \ Total size of SPI FLASH
 : signature$   " CL3"  ;
 : model$       " olpcXO-3.0"  ;
 : compatible$  " olpcxo-3.0"  ;
+: platform$    " mrvl,mmp2"   ;
 : ec-platform$  ( -- adr len )  " 5"  ;
 : bundle-suffix$  ( -- adr len )  " 3"  ;
 

@@ -25,6 +25,7 @@ h# 10.0000 constant /rom           \ Total size of SPI FLASH
 : signature$    " CL2"  ;
 : model$        " olpc,XO-1.75"  ;
 : compatible$   " olpc,xo-1.75"  ;
+: platform$     " mrvl,mmp2"  ;
 : ec-platform$  ( -- adr len )  " 4"  ;
 : bundle-suffix$  ( -- adr len )  " 2"  ;
 

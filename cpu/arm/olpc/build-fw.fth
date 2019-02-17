@@ -351,7 +351,7 @@ warning @ warning off
       model-version$   2dup model     ( name$ )
       " OLPC " encode-bytes  2swap encode-string  encode+  " banner-name" property
       board-revision " board-revision-int" integer-property
-      compatible$  " compatible" string-property
+      platform$ encode-string  compatible$ encode-string encode+  " compatible" property
       " SN" find-tag  if  ?-null  else  " Unknown"  then  " serial-number" string-property
 
       ec-api-ver@ " ec-version" integer-property
