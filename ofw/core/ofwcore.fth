@@ -2972,6 +2972,9 @@ root-device
 
    new-device				\ Reports firmware run-time choices
       " chosen" device-name
+      0 0 " ranges"	  property
+      1 " #size-cells"	  integer-property
+      1 " #address-cells" integer-property
    finish-device
 
    new-device				\ Node describing the firmware
