@@ -3,6 +3,7 @@ new-device
 
 " accelerometer" name
 " lis3lv02d" +compatible
+" st,lis3lv02d" +compatible
 
 true value hi-res?
 
