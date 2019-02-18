@@ -65,7 +65,7 @@ dev /
         \ The reg and compatible properties are set by probing, based on the actual
         \ image sensor encountered.  For example:
         \  h# 21 1 reg
-        \  " omnivision,ov7670" +compatible
+        \  " ovti,ov7670" +compatible
 
          0 0 encode-bytes
             cam-pwr-gpio# 0 encode-gpio
