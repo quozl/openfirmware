@@ -5,6 +5,7 @@ new-device
 
 " rtc" name
 " idt,idt1338-rtc" +compatible
+" dallas,ds1338" +compatible
 h# 68 1 reg
 
 : rtc@  ( reg# -- byte )  " reg-b@" $call-parent  ;
