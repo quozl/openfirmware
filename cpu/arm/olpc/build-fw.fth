@@ -325,6 +325,8 @@ devalias keyboard /ap-sp/keyboard
 devalias mouse    /ap-sp/mouse
 [then]
 
+fload ${BP}/dev/olpc/gpio-keys.fth
+
 fload ${BP}/dev/olpc/mmp2camera/loadpkg.fth
 
 fload ${BP}/cpu/arm/firfilter.fth
