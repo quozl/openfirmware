@@ -1,6 +1,7 @@
 " "  " d420a000" " /"  begin-package
    " camera" device-name
    " marvell,mmpcam" +compatible
+   " marvell,mmp2-ccic" +compatible
    my-address my-space  h# 800  reg
    " /pmua" encode-phandle 2 encode-int encode+ " clocks" property
 [ifdef] mmp3
@@ -16,6 +17,7 @@
       cam-rst-gpio# 0 encode-gpio
    " gpios" property
 
+   " axi" " clock-names" string-property
    " /image-sensor" encode-phandle  " image-sensor" property
 
 0 [if]
