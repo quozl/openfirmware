@@ -71,6 +71,9 @@ dev /
             cam-pwr-gpio# 0 encode-gpio
             cam-rst-gpio# 0 encode-gpio
          " gpios" property
+
+         0 0 encode-bytes  cam-pwr-gpio# 1 encode-gpio  " powerdown-gpios" property
+         0 0 encode-bytes  cam-rst-gpio# 1 encode-gpio  " reset-gpios" property
       finish-device
    finish-device
 
