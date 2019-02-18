@@ -54,6 +54,7 @@ create gpio-offsets
    2 " #gpio-cells" integer-property
    " " " interrupt-controller" property
    2 " #interrupt-cells" integer-property
+   0 0 " ranges" property
 
    " /apbc" encode-phandle d# 13 encode-int encode+ " clocks" property
    " GPIO" " clock-names" string-property
