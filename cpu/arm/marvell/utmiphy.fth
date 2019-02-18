@@ -7,6 +7,9 @@ purpose: Init UTMI USB Phy in Marvell SoC
 
 my-address my-space h# 100 reg
 " mrvl,mmp2-utmiphy" +compatible
+" marvell,mmp2-usb-phy" +compatible
+
+0 " #phy-cells" integer-property
    
 : +utmi  ( offset -- offset' )  h# 20.7000 +  ;
 
