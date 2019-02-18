@@ -11,7 +11,7 @@
 " dcon" device-name
 " olpc,xo1-dcon" +compatible
 " olpc,xo1.75-dcon" +compatible
-my-space 1 reg
+my-space " reg" integer-property
 
 0 0 encode-bytes
 dcon-stat0-gpio# 0 encode-gpio

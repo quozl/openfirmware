@@ -15,10 +15,10 @@ purpose: Device tree nodes for I2C buses implemented with GPIOs
 ;
 
 : make-sensor-node  ( name$ i2c-addr -- )
-   " /camera-i2c" find-device  ( name$ i2c-addr )
-   new-device                  ( name$ i2c-addr )
-      1 reg                    ( name$ )
-      +compatible              ( )
+   " /camera-i2c" find-device     ( name$ i2c-addr )
+   new-device                     ( name$ i2c-addr )
+      " reg" integer-property     ( name$ )
+      +compatible                 ( )
       " image-sensor" device-name
       0 0 encode-bytes
          cam-pwr-gpio# 0 encode-gpio
@@ -33,7 +33,7 @@ dev /
       " camera-i2c" device-name
       " i2c-gpio" +compatible
       1 " #address-cells" integer-property
-      1 " #size-cells" integer-property
+      0 " #size-cells" integer-property
 
       0 0 reg  \ So linux will assign a static device name
 
@@ -81,7 +81,7 @@ dev /
       " dcon-i2c" device-name
       " i2c-gpio" +compatible
       1 " #address-cells" integer-property
-      1 " #size-cells" integer-property
+      0 " #size-cells" integer-property
 
       0 0 reg  \ So linux will assign a static device name
 
@@ -120,7 +120,7 @@ dev /
       0 0 reg
       " i2c-gpio" +compatible
       1 " #address-cells" integer-property
-      1 " #size-cells" integer-property
+      0 " #size-cells" integer-property
       : encode-unit  ( phys.. -- str )  push-hex (u.) pop-base  ;
       : decode-unit  ( str -- phys.. )  push-hex  $number  if  0  then  pop-base  ;
       
@@ -146,7 +146,7 @@ dev /
 
       new-device
          " hdmi-ddc" device-name    
-         h# 50 1 reg
+         h# 50 " reg" integer-property
          " eeprom" +compatible
          : close  ( -- )  ;
          h# 80 constant /edid-chunk

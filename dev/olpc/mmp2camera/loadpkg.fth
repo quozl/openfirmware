@@ -45,7 +45,7 @@
       my-self >r  0 to my-self
       " /image-sensor" find-device  ( name$ i2c-addr )
       " reg" get-property  if       ( name$ i2c-addr )
-         1 reg                      ( name$ )
+         " reg" integer-property    ( name$ )
          +compatible                ( )
       else                          ( name$ i2c-addr regval$ )
          2drop 3drop                ( )
