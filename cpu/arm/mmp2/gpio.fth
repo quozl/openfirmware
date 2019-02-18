@@ -44,6 +44,7 @@ create gpio-offsets
 0 0  " d4019000" " /" begin-package
    " gpio" name
 
+   " marvell,mmp2-gpio" +compatible
    " mrvl,mmp-gpio" encode-string +compatible
 
    my-address my-space  h# 1000 reg
