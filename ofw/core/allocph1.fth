@@ -72,6 +72,8 @@ new-device
 
 " memory" device-name
 
+" memory" " device_type" string-property
+
 list: physavail   0 physavail !
 
 headers
