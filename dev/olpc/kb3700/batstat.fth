@@ -153,6 +153,9 @@ dev /
 new-device
 " battery" device-name
 " olpc,xo1-battery" +compatible
+[ifndef] olpc-cl1
+" olpc,xo1.5-battery" +compatible
+[then]
 
 0 0 reg  \ Needed so test-all will run the selftest
 
