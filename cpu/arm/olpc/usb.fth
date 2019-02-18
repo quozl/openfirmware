@@ -14,10 +14,8 @@ purpose: USB features common to most OLPC ARM platforms
 
    usb-hub-reset-gpio# 1  " usb-hub-reset-gpios" gpio-property
 
-   " host" " dr_mode"  string-property
-   " utmi" " phy_type" string-property
-
-   " /usb2-phy" encode-phandle " transceiver" property
+   " usb" " phy-names" string-property
+   " /usb2-phy" encode-phandle " phys" property
 
    false constant has-dbgp-regs?
    false constant needs-dummy-qh?
