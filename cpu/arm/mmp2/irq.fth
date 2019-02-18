@@ -52,7 +52,9 @@ d# 64 constant #levels
 
 [ifdef] mmp2  " mrvl,mmp2-intc" +compatible   [then]
 [ifdef] mmp3  " mrvl,mmp3-intc" +compatible   [then]
+" simple-bus" +compatible
 
+0 0 " ranges" property
 1 " #address-cells" integer-property
 1 " #size-cells" integer-property
 : encode-unit  ( phys.. -- str )  push-hex (u.) pop-base  ;
