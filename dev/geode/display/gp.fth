@@ -94,13 +94,42 @@ alias depth+ wa+
    ['] fbgeode-delete-lines is delete-lines
 ;
 
+: add-simple-framebuffer ( -- )
+   height width frame-buffer-adr             ( height width fba )
+   " /chosen" find-device
+      new-device
+         " framebuffer" device-name
+         " simple-framebuffer" +compatible
+
+         >physical  encode-int               ( height width adr len )
+         2over * 2 *  encode-int encode+      ( height width adr len adr len)
+         " reg" property
+
+         dup 2 * " stride" integer-property  ( height width )
+         " width" integer-property           ( height )
+         " height" integer-property          ( )
+         " r5g6b5" " format" string-property
+         " /display" encode-phandle " display" property
+      finish-device
+   device-end
+;
+
+: remove-simple-framebuffer ( -- )
+    " /chosen/framebuffer"  find-package  if  delete-package  then
+;
+
 : display-install  ( -- )
    init-all
    default-font set-font
    width  height                           ( width height )
    over char-width / over char-height /    ( width height rows cols )
    /scanline depth fb-install gp-install   ( )
+   add-simple-framebuffer
    init-hook
+;
+
+: display-remove  ( -- )
+   remove-simple-framebuffer
 ;
 
 : display-selftest  ( -- failed? )  false  ;
