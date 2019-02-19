@@ -361,6 +361,33 @@ d# 256 constant /cursor
    \ Used as temporary storage for images by $get-image
    : graphmem  ( -- adr )  dimensions * pixel*  fb-mem-va +  ;
 
+   : add-simple-framebuffer ( -- )
+      " /chosen" find-device
+         new-device
+            " framebuffer" device-name
+            " simple-framebuffer" +compatible
+
+            fb-mem-va >physical  encode-int
+            vdisp hdisp * 2 *  encode-int encode+
+            " reg" property
+
+            hdisp " width" integer-property
+            vdisp " height" integer-property
+            hdisp 2 * " stride" integer-property
+            " r5g6b5" " format" string-property
+            " /display" encode-phandle " display" property
+
+            " /clocks" encode-phandle mmp2-disp0-clk# encode-int encode+
+            " /clocks" encode-phandle encode+ mmp2-disp0-lcdc-clk# encode-int encode+
+            " clocks" property
+         finish-device
+      device-end
+   ;
+
+   : remove-simple-framebuffer ( -- )
+       " /chosen/framebuffer"  find-package  if  delete-package  then
+   ;
+
    : display-install  ( -- )
       map-frame-buffer
       display-on
@@ -368,9 +395,12 @@ d# 256 constant /cursor
       width  height                           ( width height )
       over char-width / over char-height /    ( width height rows cols )
       /scanline depth fb-install              ( )
+      add-simple-framebuffer
    ;
 
-   : display-remove  ( -- )  ;
+   : display-remove  ( -- )
+      remove-simple-framebuffer
+   ;
    : display-selftest  ( -- failed? )  false  ;
 
    ' display-install  is-install
