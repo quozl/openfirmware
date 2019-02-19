@@ -6,8 +6,10 @@ purpose: Display driver for OLPC ARM/MMP platforms
    my-address my-space h# 1000 reg
 
    " mrvl,pxa168fb" +compatible
+   " marvell,armada-lcdc" +compatible
+   " marvell,mmp2-lcd" +compatible
 
-   " LCDCLK" " clock-names" string-property
+   " disp0" " clock-names" string-property
    " /pmua" encode-phandle 1 encode-int encode+ " clocks" property
    d# 41 " interrupts" integer-property
 
