@@ -62,7 +62,19 @@
    warning !
    fload ${BP}/dev/olpc/mmp2camera/ccic.fth
    fload ${BP}/dev/olpc/cameratest.fth
+
+   new-device
+      " port" device-name
+      new-device
+         " endpoint" device-name
+         " /image-sensor/port/endpoint" encode-phandle  " remote-endpoint" property
+      finish-device
+   finish-device
 end-package
 : probe-image-sensor  ( -- )
    " /camera" open-dev close-dev
 ;
+
+" /image-sensor/port/endpoint" find-device
+   " /camera/port/endpoint" encode-phandle " remote-endpoint" property
+device-end

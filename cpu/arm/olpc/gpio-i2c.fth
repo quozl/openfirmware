@@ -78,6 +78,15 @@ dev /
 
          0 0 encode-bytes  cam-pwr-gpio# 1 encode-gpio  " powerdown-gpios" property
          0 0 encode-bytes  cam-rst-gpio# 1 encode-gpio  " reset-gpios" property
+
+         new-device
+            " port" device-name
+            new-device
+               " endpoint" device-name
+               h# 1 " hsync-active" integer-property
+               h# 1 " vsync-active" integer-property
+            finish-device
+         finish-device
       finish-device
    finish-device
 
