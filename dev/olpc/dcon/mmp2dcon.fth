@@ -66,6 +66,7 @@ new-device
       1 " reg" integer-property
       new-device
          " endpoint" device-name
+         " /panel/port/endpoint" encode-phandle " remote-endpoint" property
       finish-device
    finish-device
 finish-device
@@ -354,6 +355,10 @@ end-package
 
 " /display/port/endpoint" find-device
    " /dcon/ports/port@0/endpoint" encode-phandle " remote-endpoint" property
+device-end
+
+" /panel/port/endpoint" find-device
+   " /dcon/ports/port@1/endpoint" encode-phandle " remote-endpoint" property
 device-end
 
 stand-init:

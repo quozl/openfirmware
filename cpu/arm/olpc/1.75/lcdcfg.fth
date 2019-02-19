@@ -36,6 +36,14 @@ new-device
 \ field value 1.
 [ifdef] mmp3  h# 20001102  [else]  h# 40001102  [then]  " clock-divider-regval" integer-property
 
+   new-device
+      " port" device-name
+      new-device
+         " endpoint" device-name
+         \ " /dcon-i2c/dcon@d/ports/port@1/endpoint" encode-phandle " remote-endpoint" property
+      finish-device
+   finish-device
+
 finish-device
 device-end
 
