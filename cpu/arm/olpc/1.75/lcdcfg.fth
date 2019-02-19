@@ -9,9 +9,7 @@ new-device
    " marvell,mmp-vsram" +compatible
    d# 64 " granularity" integer-property
 finish-device
-device-end
 
-dev /display
 new-device
    " panel" device-name
    " mrvl,dumb-panel" +compatible
@@ -52,7 +50,7 @@ device-end
 [ifdef] has-dcon
 fload ${BP}/dev/olpc/dcon/mmp2dcon.fth        \ DCON control
 
-dev /display/panel
+dev /panel
    " /dcon" encode-phandle  " control-node" property
 device-end
 [then]
