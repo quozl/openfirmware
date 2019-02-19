@@ -26,6 +26,33 @@ dcon-irq-gpio#   0 encode-gpio
 " irq"   encode-string encode+
 " gpio-names" property
 
+new-device
+   " ports" device-name
+   1 " #address-cells" integer-property
+   0 " #size-cells" integer-property
+
+   : decode-unit  ( adr len -- phys )  $number  if  0  then  ;
+   : encode-unit  ( phys -- adr len )  (u.)  ;
+   : open  ( -- true )  true  ;
+   : close  ( -- )  ;
+
+   new-device
+      " port" device-name
+      0 " reg" integer-property
+      new-device
+         " endpoint" device-name
+      finish-device
+   finish-device
+
+   new-device
+      " port" device-name
+      1 " reg" integer-property
+      new-device
+         " endpoint" device-name
+      finish-device
+   finish-device
+finish-device
+
 \ DCON internal registers, accessed via I2C
 \ 0 constant DCON_ID
 \ 1 constant DCON_MODE
