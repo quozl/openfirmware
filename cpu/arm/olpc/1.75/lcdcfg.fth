@@ -15,6 +15,8 @@ dev /display
 new-device
    " panel" device-name
    " mrvl,dumb-panel" +compatible
+   " simple-panel" +compatible
+   " innolux,ls075at011" +compatible
 
    " OLPC DCON panel" model
    : +i  encode-int encode+  ;
