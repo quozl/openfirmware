@@ -39,6 +39,8 @@ dev /
 
       0 0 reg  \ So linux will assign a static device name
 
+      d# 1000 " i2c-gpio,timeout-ms" integer-property
+
       : encode-unit  ( phys.. -- str )  push-hex (u.) pop-base  ;
       : decode-unit  ( str -- phys.. )  push-hex  $number  if  0  then  pop-base  ;
 
