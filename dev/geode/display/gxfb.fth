@@ -521,8 +521,6 @@ headers
    frame-buffer-adr /fb +  to graphmem
 ;
 
-: display-remove  ( -- )  ;
-
 " display"                      device-type
 " ISO8859-1" encode-string    " character-set" property
 0 0  encode-bytes  " iso6429-1983-colors"  property
