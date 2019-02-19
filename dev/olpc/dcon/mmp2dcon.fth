@@ -57,6 +57,7 @@ new-device
       0 " reg" integer-property
       new-device
          " endpoint" device-name
+         " /display/port/endpoint" encode-phandle " remote-endpoint" property
       finish-device
    finish-device
 
@@ -350,6 +351,10 @@ h# f value default-bright
 ' (dcon-unjam)  to dcon-unjam
 
 end-package
+
+" /display/port/endpoint" find-device
+   " /dcon/ports/port@0/endpoint" encode-phandle " remote-endpoint" property
+device-end
 
 stand-init:
    has-dcon-ram?  0=  if

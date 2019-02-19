@@ -13,6 +13,14 @@ purpose: Display driver for OLPC ARM/MMP platforms
    " /pmua" encode-phandle 1 encode-int encode+ " clocks" property
    d# 41 " interrupts" integer-property
 
+   new-device
+      " port" device-name
+      new-device
+         " endpoint" device-name
+         d# 18 " bus-width" integer-property
+      finish-device
+   finish-device
+
 \ In MMP3, the SCLK_SOURCE_SELECT field moved from bit 30 to bit 29,
 \ so the high nibble changed from 4 (MMP2) to 2 (MMP3) for the same
 \ field value 1.
