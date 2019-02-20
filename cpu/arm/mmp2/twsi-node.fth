@@ -17,7 +17,7 @@ new-device
 [then]                                             ( baseadr clock# irq# )
 " interrupts" integer-property                     ( baseadr clock# )
 
-" /apbc" encode-phandle rot  encode-int encode+  " clocks" property
+" /clocks" encode-phandle rot  encode-int encode+  " clocks" property
 h# 1000 reg                                        ( )
 
 1 " #address-cells" integer-property
