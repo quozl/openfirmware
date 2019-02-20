@@ -154,7 +154,7 @@ fload ${BP}/cpu/arm/mmp2/sspspi.fth        \ Synchronous Serial Port SPI interfa
 0 0  " d4035000"  " /" begin-package
    " flash" device-name
 
-   " /apbc" encode-phandle d# 19 encode-int encode+ " clocks" property
+   " /clocks" encode-phandle mmp2-ssp1-clk# encode-int encode+ " clocks" property
    d# 0 " interrupts" integer-property
    /rom value /device
    my-address my-space h# 100 reg

@@ -40,7 +40,7 @@ my-address      my-space  h# 1000  encode-reg
 ec-spi-ack-gpio# 0  " ready-gpios"  gpio-property
 
    d# 20 " interrupts" integer-property
-   " /apbc" encode-phandle d# 21 encode-int encode+ " clocks" property
+   " /clocks" encode-phandle mmp2-ssp2-clk# encode-int encode+ " clocks" property
 
    ec-spi-ack-gpio# 1  " ack-gpios"  gpio-property
    ec-spi-cmd-gpio# 1  " cmd-gpios"  gpio-property
