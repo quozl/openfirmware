@@ -91,7 +91,7 @@ previous definitions
       0 0  " non-removable" property
       d# 52 " interrupts" integer-property
 
-      " /pmua" encode-phandle 4 encode-int encode+ " clocks" property
+      " /clocks" encode-phandle mmp2-sdh1-clk# encode-int encode+ " clocks" property
       " io" " clock-names" string-property
       d# 50 encode-int  d# 500 encode-int encode+  " power-delay-ms" property
       0 0 " broken-cd" property
@@ -127,7 +127,7 @@ previous definitions
       d# 15 encode-int " clk-delay-cycles" property
       d# 53 " interrupts" integer-property
 
-      " /pmua" encode-phandle d# 14 encode-int encode+ " clocks" property
+      " /clocks" encode-phandle  mmp2-sdh2-clk# encode-int encode+ " clocks" property
       " io" " clock-names" string-property
       d# 40 encode-int  1 encode-int encode+  " power-delay-ms" property
       0 0 " broken-cd" property
