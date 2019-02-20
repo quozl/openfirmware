@@ -9,7 +9,7 @@ purpose: USB features common to most OLPC ARM platforms
    ;
    : my-map-out  ( adr len -- )  swap h# 100 - swap " map-out" $call-parent  ;
    " USBCLK" " clock-names" string-property
-   " /pmua" encode-phandle 5 encode-int encode+ " clocks" property
+   " /clocks" encode-phandle mmp2-usb-clk# encode-int encode+ " clocks" property
    d# 44 " interrupts" integer-property
 
    usb-hub-reset-gpio# 1  " usb-hub-reset-gpios" gpio-property
