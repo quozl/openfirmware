@@ -21,7 +21,7 @@ new-device
 [then]
 
 
-   " /pmua" encode-phandle d# 11 encode-int encode+ " clocks" property
+   " /clocks" encode-phandle mmp2-gc-clk# encode-int encode+ " clocks" property
    " GCCLK" " clock-names" string-property
 finish-device
 device-end

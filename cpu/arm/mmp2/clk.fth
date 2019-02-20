@@ -206,6 +206,7 @@ h# 240 constant audio-sram-pwr
    dup mmp2-sdh2-clk#   =  if drop  sdh2-clk  generic-on/off  exit then
    dup mmp2-sdh3-clk#   =  if drop  sdh3-clk  generic-on/off  exit then
    dup mmp2-ccic0-clk#  =  if drop  ccic0-on/off              exit then
+   dup mmp2-audio-clk#  =  if drop  audio-on/off              exit then
 
    " clock=" type .d " on=" type .d cr
    abort " Unimplemented clock"
