@@ -101,6 +101,7 @@ previous definitions
       " /gpio" encode-phandle  en-wlan-pwr-gpio# encode-int encode+  0 encode-int encode+  " power-gpios" property
 [then]
 [ifdef] wlan-reset-gpio#
+      " /pwrseq0" encode-phandle " mmc-pwrseq" property
       \ Active low
       " /gpio" encode-phandle  wlan-reset-gpio# encode-int encode+  1 encode-int encode+  " reset-gpios" property
 [then]

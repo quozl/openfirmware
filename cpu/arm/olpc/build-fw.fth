@@ -279,6 +279,13 @@ fload ${BP}/cpu/arm/mmp3/galcore.fth
    " /gpio" encode-phandle en-wlan-pwr-gpio# encode-int encode+ d# 0 encode-int encode+ " gpio" property
 end-package
 
+0 0  " "  " /" begin-package
+   " pwrseq0" device-name
+   " mmc-pwrseq-sd8787" +compatible
+   " /gpio" encode-phandle wlan-pd-gpio# encode-int encode+ d# 0 encode-int encode+ " powerdown-gpios" property
+   " /gpio" encode-phandle wlan-reset-gpio# encode-int encode+ d# 0 encode-int encode+ " reset-gpios" property
+end-package
+
 fload ${BP}/cpu/arm/olpc/sdhci.fth
 
 devalias net /wlan
