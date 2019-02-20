@@ -259,7 +259,7 @@ fload ${BP}/cpu/x86/pc/olpc/setwp.fth
 
    " mrvl,mmp2-vmeta" +compatible
 
-   " /pmua" encode-phandle d# 10 encode-int encode+ " clocks" property
+   " /clocks" encode-phandle mmp2-vmeta-clk# encode-int encode+ " clocks" property
    " VMETACLK" " clock-names" string-property
    d# 26 " interrupts" integer-property
 end-package
