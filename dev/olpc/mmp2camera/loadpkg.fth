@@ -3,7 +3,7 @@
    " marvell,mmpcam" +compatible
    " marvell,mmp2-ccic" +compatible
    my-address my-space  h# 800  reg
-   " /pmua" encode-phandle 2 encode-int encode+ " clocks" property
+   " /clocks" encode-phandle mmp2-ccic0-clk# encode-int encode+ " clocks" property
 [ifdef] mmp3
    \ The CCIC interrupt is shared between CCIC1 and CCIC2 on MMP3
    " /interrupt-controller/interrupt-controller@1cc" encode-phandle " interrupt-parent" property
