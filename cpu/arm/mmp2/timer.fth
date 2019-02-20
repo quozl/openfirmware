@@ -194,5 +194,5 @@ lid-off
    " mrvl,mmp-timer" +compatible
    my-address my-space  h# 100 reg
    d# 13 " interrupts" integer-property
-   " /apbc" encode-phandle 9 encode-int encode+ " clocks" property
+   " /clocks" encode-phandle mmp2-timer-clk# encode-int encode+ " clocks" property
 end-package
