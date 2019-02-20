@@ -277,18 +277,3 @@ h# 240 constant audio-sram-pwr
 ;
 
 end-package
-
-\ This is a general-purpose mechanism for enabling/disabling a clock
-\ that is described by a "clocks" property in the device node.  The
-\ property value is a phandle and an index, as used in Linux.
-
-: my-clock-on/off  ( on? -- )
-   " clocks" get-my-property  abort" No clocks property"  ( on? propval$ )
-   decode-int  >r                  ( on? propval$  r: phandle )
-   get-encoded-int                 ( on? clock#  r: phandle )
-   r> push-package                 ( on? clock#  )
-   " on/off" package-execute       ( )
-   pop-package                     ( )
-;
-: my-clock-off  ( -- )  false  my-clock-on/off  ;
-: my-clock-on  ( -- )  true  my-clock-on/off  ;
