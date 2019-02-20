@@ -65,6 +65,72 @@ h# d401.5000 encode-int encode+  h# 1000 encode-int encode+
    swap io!
 ;
 
+[ifdef] mmp3
+: ccic0-isp-island-off  ( -- )
+   h# 600 h# 1fc pmua!  \ Isolation enabled
+   \ Fiddle with ISP_CLK_RES_CTRL here to turn off ISP engine
+   h# 000 h# 1fc pmua!  \ Power off
+;
+
+: ccic0-isp-island-on   ( -- )
+   \ set ISP regs to the default value
+   0 h#  50 pmua!
+   0 h# 1fc pmua!
+
+   \ Turn on the CCIC/ISP power switch
+   h# 200 h# 1fc pmua!  \ Partially powered
+   d# 10 ms
+   h# 600 h# 1fc pmua!  \ Fully powered
+   d# 10 ms
+   h# 700 h# 1fc pmua!  \ Isolation disabled
+
+[ifdef] notdef
+   \ Empirically, the memory redundancy and SRAMs are unnecessary
+   \ for camera-only (no ISP) operation.
+
+   \ Start memory redundacy repair
+   4 h# 224 pmua-set   \ PMUA_ISP_CLK_RES_CTRL
+   begin  d# 10 ms h# 224 pmua@  4 and  0=  until
+
+   \ Enable dummy clocks to the SRAMS
+   h# 10 h# 1e0 pmua-set   \ PMUA_ISLD_CI_PDWN_CTRL
+   d# 200 ms
+   h# 10 h# 1e0 pmua-clr
+[then]
+
+   \ Enable ISP clocks here if you want to use the ISP
+   \ 8 h# 224 pmua-set  \ Enable AXI clock in PMUA_ISP_CLK_RES_CTRL
+   \ h# f00 h# 200 h# 224 pmua-fld \ Clock divider
+   \ h#  c0 h#  40 h# 224 pmua-fld \ CLock source
+   \ h# 10 h# 224 pmua-set
+
+   \ enable CCIC clocks
+   h# 8238 h# 50 pmua-set
+
+   \ Deassert ISP clocks here if you want to use the ISP
+   \ XXX should these be pmua-clr ?
+   \ 1 h# 224 pmua-set  \ AXI reset
+   \ 2 h# 224 pmua-set  \ ISP SW reset
+   \ h# 10000 h# 50 pmua-set  \ CCIC1 AXI Arbiter reset
+
+   \ De-assert CCIC Resets
+   h# 10107 h# 50 pmua-set \ XXX change to 107
+;
+[then]
+
+: ccic0-on/off  ( on? -- )
+   if
+      [ifdef] mmp3  ccic0-isp-island-on  [then]
+
+      \ Enable clocks
+      h#        3f h# 28 pmua!  \ Clock gating - AHB, Internal PIXCLK, AXI clock always on
+      h# 0003.805b h# 50 pmua!  \ PMUA clock config for CCIC - /1, PLL1/16, AXI arb, AXI, perip on
+   else
+      h# 3f h# 50 pmua-clr
+      [ifdef] mmp3  ccic0-isp-island-off  [then]
+   then
+;
+
 : on/off  ( on? clock# -- )
    dup mmp2-twsi0-clk#  =  if drop  twsi0-clk generic-on/off  exit then
    dup mmp2-twsi1-clk#  =  if drop  twsi1-clk generic-on/off  exit then
@@ -74,6 +140,7 @@ h# d401.5000 encode-int encode+  h# 1000 encode-int encode+
    dup mmp2-sdh1-clk#   =  if drop  sdh1-clk  generic-on/off  exit then
    dup mmp2-sdh2-clk#   =  if drop  sdh2-clk  generic-on/off  exit then
    dup mmp2-sdh3-clk#   =  if drop  sdh3-clk  generic-on/off  exit then
+   dup mmp2-ccic0-clk#  =  if drop  ccic0-on/off              exit then
 
    " clock=" type .d " on=" type .d cr
    abort " Unimplemented clock"
@@ -83,6 +150,7 @@ end-package
 
 \ LICENSE_BEGIN
 \ Copyright (c) 2019 Lubomir Rintel <lkundrak@v3.sk>
+\ Parts based on cpu/arm/mmp2/pmua.fth file
 \
 \ Permission is hereby granted, free of charge, to any person obtaining
 \ a copy of this software and associated documentation files (the
