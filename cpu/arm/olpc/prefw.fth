@@ -223,8 +223,10 @@ true value user-mode?
 fload ${BP}/ofw/gui/loadmenu.fth
 
 \ Marvell MMP low-level stuff
+[ifndef] olpc-cl2
 fload ${BP}/cpu/arm/mmp2/pmua.fth
 fload ${BP}/cpu/arm/mmp2/apbc.fth
+[then]
 fload ${BP}/cpu/arm/mmp2/clk.fth
 fload ${BP}/cpu/arm/mmp2/irq.fth
 fload ${BP}/cpu/arm/mmp2/timer.fth
