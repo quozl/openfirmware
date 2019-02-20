@@ -96,6 +96,7 @@ previous definitions
       d# 50 encode-int  d# 500 encode-int encode+  " power-delay-ms" property
       0 0 " broken-cd" property
 [ifdef] en-wlan-pwr-gpio#
+      " /fixedregulator0" encode-phandle " vmmc-supply" property
       \ Active high
       " /gpio" encode-phandle  en-wlan-pwr-gpio# encode-int encode+  0 encode-int encode+  " power-gpios" property
 [then]

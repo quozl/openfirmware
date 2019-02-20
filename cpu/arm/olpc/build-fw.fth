@@ -268,6 +268,17 @@ fload ${BP}/cpu/arm/olpc/lcd.fth
 [ifdef] mmp3
 fload ${BP}/cpu/arm/mmp3/galcore.fth
 [then]
+
+0 0  " "  " /" begin-package
+   " fixedregulator0" device-name
+   " regulator-fixed" +compatible
+   " wlan" " regulator-name" string-property
+   d# 3300000 " regulator-min-microvolt" integer-property
+   d# 3300000 " regulator-max-microvolt" integer-property
+   0 0 encode-bytes " enable-active-high" property
+   " /gpio" encode-phandle en-wlan-pwr-gpio# encode-int encode+ d# 0 encode-int encode+ " gpio" property
+end-package
+
 fload ${BP}/cpu/arm/olpc/sdhci.fth
 
 devalias net /wlan
