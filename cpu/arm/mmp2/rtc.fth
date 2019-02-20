@@ -11,7 +11,7 @@ purpose: Driver for MMP2 internal RTC
 
    " rtc 1Hz" encode-string " rtc alarm" encode-string  encode+ " interrupt-names" property
          
-   " /apbc" encode-phandle 0 encode-int encode+ " clocks" property
+   " /clocks" encode-phandle mmp2-rtc-clk# encode-int encode+ " clocks" property
 end-package
 
 \ Interrupt 5 combines two interrupt inputs, RTC INT (bit 1) and RTC ALARM (bit 0)
