@@ -92,9 +92,14 @@ previous definitions
       d# 52 " interrupts" integer-property
 
       " /pmua" encode-phandle 4 encode-int encode+ " clocks" property
-      " PXA-SDHCLK" " clock-names" string-property
+      " io" " clock-names" string-property
       d# 50 encode-int  d# 500 encode-int encode+  " power-delay-ms" property
       0 0 " broken-cd" property
+      d# 50000000 " clock-frequency" integer-property
+      0 0 encode-bytes " no-1-8-v" property
+      0 0 encode-bytes " wakeup-source" property
+      0 0 encode-bytes " keep-power-in-suspend" property
+
 [ifdef] en-wlan-pwr-gpio#
       " /fixedregulator0" encode-phandle " vmmc-supply" property
       \ Active high
