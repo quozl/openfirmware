@@ -128,9 +128,12 @@ previous definitions
       d# 53 " interrupts" integer-property
 
       " /pmua" encode-phandle d# 14 encode-int encode+ " clocks" property
-      " PXA-SDHCLK" " clock-names" string-property
+      " io" " clock-names" string-property
       d# 40 encode-int  1 encode-int encode+  " power-delay-ms" property
       0 0 " broken-cd" property
+      d# 50000000 " clock-frequency" integer-property
+      d# 31 " mrvl,clk-delay-cycles" integer-property
+      0 0 encode-bytes " no-1-8-v" property
 [ifdef] en-emmc-pwr-gpio#
       \ Active low
       " /gpio" encode-phandle  en-emmc-pwr-gpio# encode-int encode+  1 encode-int encode+  " power-gpios"  property
