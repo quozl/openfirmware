@@ -11,6 +11,7 @@
 " dcon" device-name
 " olpc,xo1-dcon" +compatible
 " olpc,xo1.75-dcon" +compatible
+" himax,hx8837" +compatible
 my-space " reg" integer-property
 
 0 0 encode-bytes
@@ -25,6 +26,21 @@ dcon-irq-gpio#   0 encode-gpio
 " load"  encode-string encode+
 " irq"   encode-string encode+
 " gpio-names" property
+
+0 0 encode-bytes
+dcon-stat0-gpio# 0 encode-gpio
+dcon-stat1-gpio# 0 encode-gpio
+" stat-gpios" property
+
+0 0 encode-bytes
+dcon-load-gpio# 0 encode-gpio
+" load-gpios" property
+
+" /gpio" encode-phandle " interrupt-parent" property
+
+dcon-irq-gpio# encode-int
+2 encode-int encode+ \ IRQ_TYPE_EDGE_FALLING
+" interrupts" property
 
 new-device
    " ports" device-name
