@@ -200,6 +200,23 @@ load-base constant flash-buf
 
 fload ${BP}/cpu/arm/olpc/ecflash.fth
 
+\ Reserve memory for the framebuffer
+0 0  " "  " /" begin-package
+   " reserved-memory" name
+   1 " #address-cells" integer-property
+   1 " #size-cells" integer-property
+   0 0 encode-bytes " ranges" property
+
+   new-device
+       " framebuffer" device-name
+       " marvell,armada-framebuffer" +compatible
+       " marvell,mmp2-framebuffer" +compatible
+       h# 02000000 " size" integer-property
+       h# 02000000 " alignment" integer-property
+       0 0 encode-bytes " no-map" property
+   finish-device
+end-package
+
 : ec-spi-reprogrammed   ( -- )
    use-edi-spi  spi-start
    set-ec-reboot
