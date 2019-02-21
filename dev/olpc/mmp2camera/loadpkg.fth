@@ -20,6 +20,9 @@
    " axi" " clock-names" string-property
    " /image-sensor" encode-phandle  " image-sensor" property
 
+   0 " #clock-cells" integer-property
+   " mclk" " clock-output-names" string-property
+
 0 [if]
    : alloc-capture-buffer  ( len -- vadr padr )
       \ XXX need map-in if we should use virtual mode
@@ -74,6 +77,11 @@ end-package
 : probe-image-sensor  ( -- )
    " /camera" open-dev close-dev
 ;
+
+" /image-sensor" find-device
+   " /camera" encode-phandle  " clocks" property
+   " xclk" " clock-names" string-property
+device-end
 
 " /image-sensor/port/endpoint" find-device
    " /camera/port/endpoint" encode-phandle " remote-endpoint" property
