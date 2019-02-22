@@ -107,6 +107,7 @@ variable le-group
 ;
 
 : d.write-ublocks  ( adr len d.dev-block# -- error? )
+   unknown-extensions?  if  4drop false exit  then
    ublock du* " seek" $call-parent ?dup  if  exit  then		( adr len )
    tuck " write" $call-parent <>
 ;

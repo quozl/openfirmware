@@ -32,6 +32,7 @@ create buf-table  #bufs allot
    bsize -rot  logbsize dlshift  d.read-ublocks
 ;
 : d.write-fs-block  ( adr d.fs-blk# -- error? )
+   unknown-extensions?  if  3drop false exit  then
    bsize -rot  logbsize dlshift  d.write-ublocks
 ;
 
