@@ -1,5 +1,7 @@
 purpose: Device tree nodes for I2C buses implemented with GPIOs
 
+\ 6 constant GPIO_OPEN_DRAIN
+
 : encode-gpio  ( propval$ gpio# low? -- propval$' )
    >r >r                            ( propval$  r: low? gpio# )
    " /gpio" encode-phandle encode+  ( propval$' r: low? gpio# )
@@ -39,10 +41,10 @@ dev /
 
       : encode-unit  ( phys.. -- str )  push-hex (u.) pop-base  ;
       : decode-unit  ( str -- phys.. )  push-hex  $number  if  0  then  pop-base  ;
-      
+
       0 0 encode-bytes
-         cam-sda-gpio# 0 encode-gpio
-         cam-scl-gpio# 0 encode-gpio
+         cam-sda-gpio# 6 encode-gpio
+         cam-scl-gpio# 6 encode-gpio
       " gpios" property
 
       0 instance value slave-address
@@ -89,8 +91,8 @@ dev /
       : decode-unit  ( str -- phys.. )  push-hex  $number  if  0  then  pop-base  ;
 
       0 0 encode-bytes
-         dcon-sda-gpio# 0 encode-gpio
-         dcon-scl-gpio# 0 encode-gpio
+         dcon-sda-gpio# 6 encode-gpio
+         dcon-scl-gpio# 6 encode-gpio
       " gpios" property
 
       0 instance value slave-address
@@ -123,10 +125,10 @@ dev /
       0 " #size-cells" integer-property
       : encode-unit  ( phys.. -- str )  push-hex (u.) pop-base  ;
       : decode-unit  ( str -- phys.. )  push-hex  $number  if  0  then  pop-base  ;
-      
+
       0 0 encode-bytes
-         hdmi-sda-gpio# 0 encode-gpio
-         hdmi-scl-gpio# 0 encode-gpio
+         hdmi-sda-gpio# 6 encode-gpio
+         hdmi-scl-gpio# 6 encode-gpio
       " gpios" property
 
       h# 50 instance value slave-address
