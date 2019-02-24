@@ -2,6 +2,8 @@
    " mrvl,mmp-uart" +compatible
    my-space  h# 20  reg
 
+   2 " reg-shift" integer-property
+
    : write  ( adr len -- actual )
       0 max  tuck                    ( actual adr actual )
       bounds  ?do  i c@ uemit  loop  ( actual )
