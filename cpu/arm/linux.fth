@@ -166,14 +166,12 @@ defer place-ramdisk
 
 : init-zimage?   ( -- flag )
    loaded                               ( adr len )
-   h# 30 <  if  drop false exit  then   ( adr )
-   dup h# 24 + l@  h# 016f2818  <>  if  drop false exit  then   ( adr )
-   >r
-   r@ h# 28 + l@  r@ +                  ( start r: adr )
-   r@ h# 2c + l@  r@ +                  ( start end r: adr )
-   r> drop                              ( start end )
-   over -                               ( start len )
-   
+   dup h# 30 <  if  drop false exit  then   ( adr len )
+   over h# 24 + l@  h# 016f2818  <>  if  drop false exit  then   ( adr len )
+   swap >r                              ( len r: adr )
+   r@ h# 28 + l@  r@ +                  ( len start r: adr )
+   swap r> drop                         ( start len )
+
    linux-base swap move                 ( )
 
    true to linux-loaded?                ( )
