@@ -349,6 +349,11 @@ defer upstream
    set-ack
    open-count 1 =  if
       ssp-base h# 1000  " map-out" $call-parent  0 is ssp-base
+
+      \ Reset the SSP3. There doesn't seem to be any other
+      \ way to drain the TXFIFO and we need to ensure we didn't
+      \ leave garbage there.
+      ssp3-clk-on
    then
    open-count 1- 0 max to open-count
 ;
