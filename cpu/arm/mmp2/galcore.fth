@@ -8,17 +8,9 @@ new-device
    " gpu" device-name
    " mrvl,galcore" +compatible
    gpu-pa /gpu reg
-[ifdef] mmp2
    8 encode-int " interrupts" property
    " /interrupt-controller" encode-phandle " interrupt-parent" property
    " galcore 2D" encode-string " interrupt-names" property
-[then]
-
-[ifdef] mmp3
-   d# 0 encode-int  2 encode-int encode+ " interrupts" property
-   " /interrupt-controller/interrupt-controller@1c0" encode-phandle " interrupt-parent" property
-   " galcore 3D" encode-string " galcore 2D" encode-string  encode+ " interrupt-names" property
-[then]
 
    " /clocks" encode-phandle mmp2-gc-clk# encode-int encode+ " clocks" property
    " GCCLK" " clock-names" string-property
