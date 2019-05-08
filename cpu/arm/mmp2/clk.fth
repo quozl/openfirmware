@@ -2,6 +2,7 @@
 purpose: MMP2 clock management
 
 \ From include/dt-bindings/clock/marvell,mmp2.h
+d#  27 constant mmp2-usb-pll-clk#
 d#  60 constant mmp2-twsi0-clk#
 d#  61 constant mmp2-twsi1-clk#
 d#  63 constant mmp2-twsi3-clk#
@@ -24,11 +25,17 @@ d# 104 constant mmp2-sdh3-clk#
 d# 105 constant mmp2-usb-clk#
 d# 112 constant mmp2-ccic0-clk#
 d# 120 constant mmp2-disp0-lcdc-clk#
+d# 121 constant mmp2-gpu-gc-mux-clk#
+d# 122 constant mmp2-gpu-gc-clk#
+d# 123 constant mmp2-gpu-bus-mux-clk#
+d# 124 constant mmp2-gpu-bus-clk#
+
+\ From include/dt-bindings/power/marvell,mmp2.h
+d# 0 constant mmp2-gpu-power-domain#
 
 \ FIXME: Not official clock numbers!
 d# 10000 constant mmp2-audio-clk#
 d# 10001 constant mmp2-vmeta-clk#
-d# 10002 constant mmp2-gc-clk#
 
 0 0  " "  " /" begin-package
 " clocks" name
@@ -46,6 +53,7 @@ h# d401.5000 encode-int encode+  h# 1000 encode-int encode+
 
 1 " #clock-cells" integer-property
 1 " #reset-cells" integer-property
+1 " #power-domain-cells" integer-property
 
 \            value   clr-mask  reg
 : twsi0-clk  h#   3  h#  77    h#  04 +apbc ;
