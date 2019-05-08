@@ -6,13 +6,20 @@ h#      1000 constant /gpu
 dev /
 new-device
    " gpu" device-name
-   " mrvl,galcore" +compatible
+   " vivante,gc" +compatible
    gpu-pa /gpu reg
    8 encode-int " interrupts" property
    " /interrupt-controller" encode-phandle " interrupt-parent" property
-   " galcore 2D" encode-string " interrupt-names" property
 
-   " /clocks" encode-phandle mmp2-gc-clk# encode-int encode+ " clocks" property
-   " GCCLK" " clock-names" string-property
+   " /clocks" encode-phandle mmp2-gpu-gc-clk# encode-int encode+
+   " /clocks" encode-phandle encode+ mmp2-gpu-bus-clk# encode-int encode+
+   " clocks" property
+
+   " core" encode-string
+   " bus" encode-string encode+
+   " clock-names" property
+
+   " /clocks" encode-phandle mmp2-gpu-power-domain# encode-int encode+
+   " power-domains" property
 finish-device
 device-end
