@@ -11,7 +11,7 @@ purpose: Display driver for OLPC ARM/MMP platforms
 
    " periph" encode-string
    " ext_ref_clk0" encode-string encode+
-   " clock-names" string-property
+   " clock-names" property
 
    " /clocks" encode-phandle mmp2-disp0-lcdc-clk# encode-int encode+
    " /clocks" encode-phandle encode+ mmp2-disp0-clk# encode-int encode+
