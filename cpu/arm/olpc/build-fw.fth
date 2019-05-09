@@ -265,6 +265,9 @@ fload ${BP}/cpu/x86/pc/olpc/setwp.fth
 end-package
 
 fload ${BP}/cpu/arm/olpc/lcd.fth
+[ifdef] mmp2
+fload ${BP}/cpu/arm/mmp2/galcore.fth
+[then]
 [ifdef] mmp3
 fload ${BP}/cpu/arm/mmp3/galcore.fth
 [then]
