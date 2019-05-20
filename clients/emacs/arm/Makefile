@@ -26,6 +26,8 @@ GLIBDIR=$(dir $(shell $(CC) -print-libgcc-file-name))
 INCS=-I. -I$(SRCDIR) -I$(HLIBDIR)
 MODES=-g -O2 -fno-inline
 CFLAGS= $(INCS) $(MODES)
+CFLAGS += -Wno-implicit-function-declaration
+CFLAGS += -Wno-implicit-int
 
 ifeq (y, $(shell $(CC) -xc -c -fno-stack-protector /dev/null -o /dev/null 2>/dev/null && echo y))
   CFLAGS += -fno-stack-protector
