@@ -94,6 +94,7 @@ devalias rom     /dropin-fs
 [ifdef] mmp3
 fload ${BP}/cpu/arm/mmp3/l2cache.fth
 fload ${BP}/cpu/arm/mmp3/cpunode.fth
+fload ${BP}/cpu/arm/mmp3/scu.fth
 [else]
 fload ${BP}/cpu/arm/mmp2/l2cache.fth
 fload ${BP}/cpu/x86/pc/cpunode.fth  \ The PC CPU node is actually fairly generic
