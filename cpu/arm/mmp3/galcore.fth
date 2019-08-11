@@ -13,7 +13,7 @@ new-device
 
    " galcore 3D" encode-string " galcore 2D" encode-string  encode+ " interrupt-names" property
 
-   " /pmua" encode-phandle d# 11 encode-int encode+ " clocks" property
+   " /clocks" encode-phandle mmp2-gpu-3d-clk# encode-int encode+ " clocks" property
    " GCCLK" " clock-names" string-property
 finish-device
 device-end
