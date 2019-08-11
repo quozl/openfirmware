@@ -93,11 +93,7 @@ devalias rom     /dropin-fs
 
 fload ${BP}/cpu/x86/pc/cpunode.fth  \ The PC CPU node is actually fairly generic
 
-0 0  " "  " /" begin-package
-   " l2-cache" device-name
-   " marvell,tauros2-cache" +compatible
-   3 " marvell,tauros2-cache-features" integer-property
-end-package
+fload ${BP}/cpu/arm/mmp2/l2cache.fth
 
 : cpu-mhz  ( -- n )
    " /cpu@0" find-package drop	( phandle )
