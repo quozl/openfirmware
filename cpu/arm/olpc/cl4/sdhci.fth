@@ -8,9 +8,8 @@ dev /sd  \ MMC1 - External SD
       fload ${BP}/dev/mmc/sdhci/slot.fth
       d# 39 " interrupts" integer-property
       0 0 encode-bytes  " no-1-8-v" property
-
-      " /pmua" encode-phandle 3 encode-int encode+ " clocks" property
-      " PXA-SDHCLK" " clock-names" string-property
+      " /clocks" encode-phandle mmp2-sdh0-clk# encode-int encode+ " clocks" property
+      " io" " clock-names" string-property
       d# 40 encode-int  1 encode-int encode+  " power-delay-ms" property
       \ Active low
       " /gpio" encode-phandle  d# 31 encode-int encode+  1 encode-int encode+  " cd-gpios"  property
@@ -45,9 +44,8 @@ dev /sd  \ MMC5 - internal micro-SD
       \ only accessible on the motherboard, and a heatsink must be removed to
       \ access it.
       0 0 " non-removable" property
-
-      " /pmua" encode-phandle d# 27 encode-int encode+ " clocks" property
-      " PXA-SDHCLK" " clock-names" string-property
+      " /clocks" encode-phandle mmp3-sdh4-clk# encode-int encode+ " clocks" property
+      " io" " clock-names" string-property
       d# 40 encode-int  1 encode-int encode+  " power-delay-ms" property
       0 0 " broken-cd" property
 

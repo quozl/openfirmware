@@ -37,6 +37,7 @@ d# 122 constant mmp2-usbhsic1-clk#
 d# 123 constant mmp2-gpu-bus-clk#
 d# 124 constant mmp2-gpu-3d-clk#
 d# 125 constant mmp3-gpu-2d-clk#
+d# 126 constant mmp3-sdh4-clk#
 
 \ From include/dt-bindings/power/marvell,mmp2.h
 d# 0 constant mmp2-gpu-pd#
