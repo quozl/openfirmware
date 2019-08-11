@@ -93,7 +93,11 @@ devalias rom     /dropin-fs
 
 fload ${BP}/cpu/x86/pc/cpunode.fth  \ The PC CPU node is actually fairly generic
 
+[ifdef] mmp3
+fload ${BP}/cpu/arm/mmp3/l2cache.fth
+[else]
 fload ${BP}/cpu/arm/mmp2/l2cache.fth
+[then]
 
 : cpu-mhz  ( -- n )
    " /cpu@0" find-package drop	( phandle )
