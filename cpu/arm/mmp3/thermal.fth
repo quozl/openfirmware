@@ -9,14 +9,14 @@ purpose: Driver for the MMP3 thermal sensor
    d# 11 encode-int " interrupts" property
    " /interrupt-controller/interrupt-controller@188" encode-phandle " interrupt-parent" property
 
-   " /apbc" encode-phandle 
-	34 encode-int encode+
-   " /apbc" encode-phandle encode+
-	36 encode-int encode+
-   " /apbc" encode-phandle encode+
-	37 encode-int encode+
-   " /apbc" encode-phandle encode+
-	38 encode-int encode+ " clocks" property
+   " /clocks" encode-phandle
+      mmp2-thermal0-clk# encode-int encode+
+   " /clocks" encode-phandle encode+
+      mmp3-thermal1-clk# encode-int encode+
+   " /clocks" encode-phandle encode+
+      mmp3-thermal2-clk# encode-int encode+
+   " /clocks" encode-phandle encode+
+      mmp3-thermal3-clk# encode-int encode+ " clocks" property
 
    " THSENS1" encode-string
    " THSENS2" encode-string encode+
