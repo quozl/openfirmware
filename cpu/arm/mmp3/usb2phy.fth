@@ -7,6 +7,9 @@ purpose: Init USB2 Phy in Marvell SoC
 
 my-address my-space h# 100 reg
 " mrvl,mmp3-usb2phy" +compatible
+" marvell,mmp3-usb-phy" +compatible
+
+0 " #phy-cells" integer-property
    
 : +usb2  ( offset -- offset' )  h# 20.7000 +  ;
 
