@@ -272,6 +272,10 @@ fload ${BP}/dev/olpc/kb3700/ecspi.fth      \ EC chip SPI FLASH access
 fload ${BP}/dev/olpc/kb3700/ecserial.fth   \ Serial access to EC chip
 fload ${BP}/dev/olpc/kb3700/ecio.fth       \ I/O space access to EC chip
 
+dev /embedded-controller
+" olpc,xo1-ec" +compatible
+dend
+
 fload ${BP}/cpu/x86/pc/olpc/boardrev.fth   \ Board revision decoding
 
 : cpu-mhz  ( -- n )
