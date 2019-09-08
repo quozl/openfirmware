@@ -65,6 +65,9 @@ dev /
 1 encode-int  " #address-cells"  property
 1 encode-int  " #size-cells"     property
 " OLPC" encode-string  " architecture" property
+" OLPC XO-1" model
+" amd,geode-lx" +compatible
+" olpc,xo-1" +compatible
 device-end
 
 \ Memory management services
