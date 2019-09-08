@@ -1,9 +1,25 @@
 \ See license at end of file
 purpose: Driver for "EC" (KB3700) chip
 
-\ EC access primitives
-
 h# 380 constant iobase
+
+dev /isa new-device
+   " embedded-controller" device-name
+   " embedded-controller" device-type
+
+   " pnpPNP,c09" +compatible
+   " ene,kb3700" +compatible
+
+   h# 62 1 1 encode-reg
+      h# 66 1 1 encode-reg encode+
+      h# 61 1 1 encode-reg encode+
+      h# 68 1 1 encode-reg encode+
+      h# 6c 1 1 encode-reg encode+
+      iobase 1 1 encode-reg encode+
+      " reg" property
+finish-device device-end
+
+\ EC access primitives
 
 : ec@  ( index -- b )  wbsplit iobase 1+ pc!  iobase 2+ pc!  iobase 3 + pc@  ;
 : ec!  ( b index -- )  wbsplit iobase 1+ pc!  iobase 2+ pc!  iobase 3 + pc!  ;
