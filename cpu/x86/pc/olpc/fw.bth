@@ -220,6 +220,7 @@ end-support-package
 [then]
 devalias nfs net//obp-tftp:last//nfs
 
+fload ${BP}/ofw/core/fdt.fth
 fload ${BP}/cpu/x86/pc/boot.fth
 fload ${BP}/cpu/x86/pc/linux.fth
 
