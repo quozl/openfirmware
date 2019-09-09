@@ -4237,6 +4237,21 @@ d# 32 buffer: canon-prop
 ;
 
 \
+\ Device graph helpers
+\
+
+: link-endpoint                                   ( $endpoint1 $endpoint2 -- )
+   find-device                                    ( $endpoint1)
+       encode-phandle " remote-endpoint" property ( )
+   device-end
+;
+
+: link-endpoints               ( $endpoint1 $endpoint2 -- )
+   2over 2over  link-endpoint  ( $endpoint1 $endpoint2 )
+   2swap        link-endpoint  ( )
+;
+
+\
 \ Generic Client Interface Services
 \
 
