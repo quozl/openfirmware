@@ -16,6 +16,9 @@ fload ${BP}/dev/olpc/ov7670.fth		\ Load last; most likely to be present
 fload ${BP}/dev/olpc/cafecamera/cafecamera.fth
 fload ${BP}/dev/olpc/cameratest.fth
 
+\ Probe the sensor
+open if close then
+
 end0
 
 end-tokenizing
