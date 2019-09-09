@@ -16,20 +16,6 @@ purpose: Device tree nodes for I2C buses implemented with GPIOs
    2r> property                 ( )
 ;
 
-: make-sensor-node  ( name$ i2c-addr -- )
-   " /camera-i2c" find-device     ( name$ i2c-addr )
-   new-device                     ( name$ i2c-addr )
-      " reg" integer-property     ( name$ )
-      +compatible                 ( )
-      " image-sensor" device-name
-      0 0 encode-bytes
-         cam-pwr-gpio# 0 encode-gpio
-         cam-rst-gpio# 0 encode-gpio
-      " gpios" property
-   finish-device
-   device-end
-;
-
 dev /
    new-device
       " camera-i2c" device-name
