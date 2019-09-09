@@ -70,7 +70,6 @@
       " port" device-name
       new-device
          " endpoint" device-name
-         " /image-sensor/port/endpoint" encode-phandle  " remote-endpoint" property
       finish-device
    finish-device
 end-package
@@ -83,6 +82,4 @@ end-package
    " xclk" " clock-names" string-property
 device-end
 
-" /image-sensor/port/endpoint" find-device
-   " /camera/port/endpoint" encode-phandle " remote-endpoint" property
-device-end
+" /image-sensor/port/endpoint" " /camera/port/endpoint" link-endpoints
