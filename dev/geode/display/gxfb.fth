@@ -474,6 +474,12 @@ d# 12,000  constant scanline-spins
    set-mode
 ;
 
+d# 440 8 /  constant dcon-flag
+
+: maybe-set-cmos  ( -- )
+   tft-mode?  1 and  dcon-flag cmos!
+;
+
 : probe-dcon  ( -- )
    true to dcon?  set-mode
    dcon-gpio-init   \ GPIO stuff
