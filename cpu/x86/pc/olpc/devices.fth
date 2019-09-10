@@ -4,6 +4,15 @@ purpose: Load device drivers according to configuration definitions
 : gx?  ( -- flag )  h# 4c000017 msr@ drop  4 rshift  2 =  ;
 : lx?  ( -- flag )  h# 4c000017 msr@ drop  4 rshift  3 =  ;
 
+\ This depends on a jumper on the board
+: tft-mode?  ( -- flag )
+   gx?  if
+      h# c000.2001 msr@  drop h# 40 and  0<>
+   else
+      true
+   then
+;
+
 fload ${BP}/dev/geode/msr.fth
 fload ${BP}/cpu/x86/pc/isaio.fth
 
