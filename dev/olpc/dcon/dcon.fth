@@ -234,8 +234,6 @@ dconload constant out-gpios
    \ ['] dcon-interrupt 5 request_irq
 ;
 
-0 value dcon-found?
-
 d# 440 8 /  constant dcon-flag
 
 : msr@  ( l -- d )  " rdmsr" eval  ;
