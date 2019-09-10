@@ -342,9 +342,15 @@ fload ${BP}/cpu/x86/pc/olpc/gpioinit.fth
 fload ${BP}/cpu/x86/pc/olpc/chipinit.fth
 [then]
 
-0 0  " 1,1"  " /pci" begin-package
+0 0   " "  " /isa" begin-package
+   " i2c-bus" device-name
+   1 " #address-cells" integer-property
+   0 " #size-cells" integer-property
    fload ${BP}/dev/olpc/dcon/dconsmb.fth         \ SMB access to DCON chip
    fload ${BP}/dev/olpc/dcon/dcon.fth            \ DCON control
+end-package
+
+0 0  " 1,1"  " /pci" begin-package
    fload ${BP}/dev/geode/display/loadpkg.fth     \ Geode display
 
    0 0 encode-bytes

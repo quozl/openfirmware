@@ -359,8 +359,8 @@ h# 32 buffer: icon-name
 : dcon-freeze    ( -- )  " dcon-freeze"   $call-dcon  ;
 : dcon-unfreeze  ( -- )  " dcon-unfreeze" $call-dcon  ;
 : wait-output    ( -- )  " wait-output"   $call-dcon  ;
-: dcon-video-save     ( -- )  " video-save"    $call-dcon  ;
-: dcon-video-restore  ( -- )  " video-restore" $call-dcon  ;
+: dcon-video-save     ( -- )  " video-save"    $call-screen  ;
+: dcon-video-restore  ( -- )  " video-restore" $call-screen  ;
 
 \ === Stuff moved from security.fth ===
 
