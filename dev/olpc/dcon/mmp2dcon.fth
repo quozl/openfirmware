@@ -256,8 +256,6 @@ h# f value default-bright
    default-bright bright!
 ;
 
-0 value dcon-found?
-
 : maybe-set-cmos  ( -- )  ;
 
 [ifdef] old-way
