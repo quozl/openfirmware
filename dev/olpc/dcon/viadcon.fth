@@ -220,8 +220,6 @@ d# 905 value resumeline  \ Configurable; should be set from args
    1 set-source  \ Unfreeze image
 ;
 
-0 value dcon-found?
-
 d# 440 8 /  constant dcon-flag
 
 : maybe-set-cmos  ( -- )  1  dcon-flag cmos!  ;
