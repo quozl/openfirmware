@@ -26,7 +26,9 @@ h# 70 value smb-clock  \ 8 is the shortest period the controller allows
 \ This little dance seemed to help at one point when we were having
 \ problems getting the SMBus going reliably.  It might not be
 \ necessary now that we have the clock going slower, but I'm not sure.
-: smb-init  ( -- )  smb-on  smb-stop  smb-off  smb-on  ;
+: bus-init  ( -- )  smb-on  smb-stop  smb-off  smb-on  ;
+
+: bus-reset  ( -- )  smb-stop 1 ms  smb-off  1 ms  smb-on  ;
 
 : smb-status  ( -- b )
    1 smb@  ( dup 1 smb! )
@@ -67,7 +69,7 @@ h# 70 value smb-clock  \ 8 is the shortest period the controller allows
    smb-byte-out  \ Send address and R/W
 ;
 
-: dcon@  ( reg# -- w )
+: reg-w@  ( reg# -- w )
    h# 1a  smb-start   smb-byte-out  wait-ready  \ Address and reg#
    h# 1b  smb-start   \ Switch to read
    wait-ready
@@ -76,12 +78,17 @@ h# 70 value smb-clock  \ 8 is the shortest period the controller allows
    wait-ready  0 smb@   bwjoin  ( w )
    smb-stop
 ;
-: dcon!  ( w reg# -- )
+
+: reg-w!  ( w reg# -- )
    h# 1a  smb-start  smb-byte-out            ( w )
    wbsplit swap  smb-byte-out  smb-byte-out  ( )
    wait-ready
    smb-stop
 ;
+
+: open  ( -- flag )  true  ;
+: close  ( -- )  ;
+
 \ LICENSE_BEGIN
 \ Copyright (c) 2006 FirmWorks
 \ 
