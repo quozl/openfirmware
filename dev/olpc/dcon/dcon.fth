@@ -3,7 +3,7 @@
 new-device
 " dcon" device-name
 " olpc,xo1-dcon" +compatible
-finish-device
+h# 0d " reg" integer-property
 
 \ DCON internal registers, accessed via I2C
 \ 0 constant DCON_ID
@@ -32,6 +32,11 @@ finish-device
 \ h# 4000 constant DM_DEBUG
 \ h# 8000 constant DM_SELFTEST
 
+: bus-init  ( -- )  " bus-init" $call-parent  ;
+: bus-reset  ( -- )  " bus-reset" $call-parent  ;
+
+: dcon@  ( reg# -- word )  " reg-w@" $call-parent  ;
+: dcon!  ( word reg# -- )  " reg-w!" $call-parent  ;
 
 \ A-test Schematics show:
 \ GPIO5 - DCONSTAT (input to 5536)
@@ -110,7 +115,7 @@ d# 905 value resumeline  \ Configurable; should be set from args
 \ gx_configure_tft(info);
 
 : try-dcon!  ( w reg# -- )
-   ['] dcon!  catch  if  2drop  smb-stop 1 ms  smb-off  1 ms  smb-on  then
+   ['] dcon!  catch  if  2drop  bus-reset  then
 ;
 
 : mode@    ( -- mode )    1 dcon@  ;
@@ -138,11 +143,11 @@ d# 905 value resumeline  \ Configurable; should be set from args
 ;
 
 \ Setup so it can be called by execute-device-method
-: dcon-off  ( -- )  smb-init  h# 12 ['] mode!  catch  if  drop  then  ;
+: dcon-off  ( -- )  bus-init  h# 12 ['] mode!  catch  if  drop  then  ;
 
 : dcon2?  ( -- flag )
    0 ['] dcon@ catch  if  ( x )
-      drop   smb-init     ( )
+      drop   bus-init     ( )
       0 ['] dcon@ catch  if  drop false exit  then
    then
    h# dc02 =
@@ -233,6 +238,84 @@ dconload constant out-gpios
 
    \ ['] dcon-interrupt 5 request_irq
 ;
+
+\ This is a horrible hack to get the DCON PLL started.
+\ What is going on is that you have to start the video timing
+\ generator assuming that the DCON is present, i.e. with 1200x900
+\ timing parameters.  Then you try to turn on the DCON, and check
+\ to see if you get a DCON interrupt at the right video scan line.
+\ If not, you try again.  And again.  Eventually you give up.
+
+\ Each iteration of the loop below takes 2.5 us (measured).
+\ A frame is 1/50 sec, or 20 ms.  If we spin for 25 ms, we are
+\ sure to see scanline 905.  So we use a little longer than 25 ms,
+\ just to be safe.
+d# 12,000  constant scanline-spins
+
+0 instance value dc-base
+
+: irq@905?  ( -- dcon? )
+   lock[
+   false
+   scanline-spins 0 do
+      h# 6e dc-base + w@ h# 7ff and d# 905 =  if
+         gpio-data@  dconirq and  0<>       ( false dcon? )
+         nip
+         leave
+      then
+   loop
+   ]unlock
+;
+
+: good-dcon?  ( -- flag )
+   atest?  if    \ A-test boards don't need this PLL kick
+      0 ['] dcon@ catch  if  drop  bus-init  false exit  then
+      wbsplit nip  h# dc =    ( flag )
+      exit
+   then
+
+   dcon2?  if  true exit  then
+
+   \ Scan line enable (100), color swizzling (20),
+   \ blanking (10), pass thru disable (1)
+   h# 131    1 ['] dcon! catch  if  2drop bus-init  false exit  then  \ Mode
+   h#   0    9 ['] dcon! catch  if  2drop bus-init  false exit  then  \ Mode
+   d# 19 0  do
+      h# cc h# 4b ['] dcon! catch  if  2drop bus-init  then  \ PLL
+   loop
+   h# cc h# 4b ['] dcon! catch  if  2drop bus-init  false exit  then  \ PLL
+
+   irq@905?                     ( flag )
+;
+
+: dcon-restart  ( -- )
+   dcon-gpio-init
+   d# 50 0  do
+      good-dcon?  if  dcon-setup  h# 11 mode!  leave  then
+   loop
+;
+
+d# 440 8 /  constant dcon-flag
+
+: maybe-set-cmos  ( -- )
+   tft-mode?  1 and  dcon-flag cmos!
+;
+
+: probe-dcon  ( dc-base -- dcon? )
+   to dc-base
+   dcon-gpio-init   \ GPIO stuff
+   d# 50 0  do
+      good-dcon?  if  dcon-enable  maybe-set-cmos  unloop true exit  then
+   loop
+
+   0 dcon-flag cmos!
+   false
+;
+
+: open  ( -- flag )  true  ;
+: close  ( -- )  ;
+
+finish-device
 
 \ LICENSE_BEGIN
 \ Copyright (c) 2006 FirmWorks
