@@ -91,7 +91,6 @@ dend
 
 fload ${BP}/cpu/x86/pc/olpc/port80.fth	\ Port 80 debug messages
 
-fload ${BP}/dev/geode/gpio.fth		\ Rudimentary GPIO driver
 fload ${BP}/cpu/x86/pc/olpc/probemem.fth	\ Memory probing
 
 [ifdef] virtual-mode

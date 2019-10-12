@@ -288,6 +288,7 @@ fload ${BP}/ofw/core/muxdev.fth          \ I/O collection/distribution device
 
 \needs md5init  fload ${BP}/ofw/ppp/md5.fth                \ MD5 hash
 
+fload ${BP}/dev/geode/gpio.fth		 \ Rudimentary GPIO driver
 fload ${BP}/dev/geode/acpi.fth           \ Power management
 \ warning @ warning off
 \ : stand-init-io  stand-init-io  h# fff0.0000 to flash-base  ;
