@@ -3,7 +3,54 @@
 new-device
 " dcon" device-name
 " olpc,xo1-dcon" +compatible
+" himax,hx8837" +compatible
 h# 0d " reg" integer-property
+
+" /isa" encode-phandle
+   dcon-stat0-gpio# encode-int encode+
+   0 encode-int encode+
+" /isa" encode-phandle encode+
+   dcon-stat1-gpio# encode-int encode+
+   0 encode-int encode+
+" stat-gpios" property
+
+" /isa" encode-phandle
+   dcon-load-gpio# encode-int encode+
+   0 encode-int encode+
+" load-gpios" property
+
+" /isa" encode-phandle " interrupt-parent" property
+
+dcon-irq-gpio# encode-int
+2 encode-int encode+ \ IRQ_TYPE_EDGE_FALLING
+" interrupts" property
+
+new-device
+   " ports" device-name
+   1 " #address-cells" integer-property
+   0 " #size-cells" integer-property
+
+   : decode-unit  ( adr len -- phys )  $number  if  0  then  ;
+   : encode-unit  ( phys -- adr len )  (u.)  ;
+   : open  ( -- true )  true  ;
+   : close  ( -- )  ;
+
+   new-device
+      " port" device-name
+      0 " reg" integer-property
+      new-device
+         " endpoint" device-name
+      finish-device
+   finish-device
+
+   new-device
+      " port" device-name
+      1 " reg" integer-property
+      new-device
+         " endpoint" device-name
+      finish-device
+   finish-device
+finish-device
 
 \ DCON internal registers, accessed via I2C
 \ 0 constant DCON_ID
