@@ -92,6 +92,7 @@ dend
 fload ${BP}/cpu/x86/pc/olpc/port80.fth	\ Port 80 debug messages
 
 fload ${BP}/cpu/x86/pc/olpc/probemem.fth	\ Memory probing
+fload ${BP}/dev/olpc/panel.fth		\ LCD panel
 
 [ifdef] virtual-mode
 fload ${BP}/cpu/x86/loadvmem.fth	\ /mmu node
