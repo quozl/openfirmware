@@ -31,6 +31,11 @@ alias >set noop   ( mask -- mask' )
 
 h# 5140000C constant MSR_LBAR_GPIO
 
+dev /isa
+   " " " gpio-controller" property
+   2 " #gpio-cells" integer-property
+device-end
+
 stand-init: gpio
    MSR_LBAR_GPIO rdmsr  ( lo hi )
    h# 0000f001 <>  abort" GPIO not enabled"

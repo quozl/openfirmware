@@ -256,6 +256,7 @@ fload ${BP}/ofw/core/muxdev.fth          \ I/O collection/distribution device
 
 \needs md5init  fload ${BP}/ofw/ppp/md5.fth                \ MD5 hash
 
+fload ${BP}/dev/geode/gpio.fth           \ Rudimentary GPIO driver
 fload ${BP}/dev/geode/acpi.fth           \ Power management
 
 fload ${BP}/dev/olpc/spiflash/memflash.fth \ Memory-mapped FLASH access

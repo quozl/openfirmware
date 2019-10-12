@@ -285,6 +285,7 @@ fload ${BP}/ofw/termemu/fb16.fth
 end-package
 devalias screen /display
 
+fload ${BP}/dev/geode/gpio.fth		 \ Rudimentary GPIO driver
 \ fload ${BP}/dev/geode/acpi.fth           \ Power management
 
 \ LICENSE_BEGIN
