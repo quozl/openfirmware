@@ -604,6 +604,13 @@ true                               ' client-symbols?  set-config-int-default
       ['] link-endpoints catch  if  2drop 2drop  then
 ;
 
+: display-dt-fixup
+   " /display/ports/port@1/endpoint" " /dcon/ports/port@0/endpoint"
+      ['] link-endpoints catch  if  2drop 2drop  then
+   " /dcon/ports/port@1/endpoint" " /panel/port/endpoint"
+      ['] link-endpoints catch  if  2drop 2drop  then
+;
+
 : startup  ( -- )
    standalone?  0=  if  exit  then
 
@@ -631,6 +638,7 @@ true                               ' client-symbols?  set-config-int-default
 
    probe-pci
    camera-dt-fixup
+   display-dt-fixup
    show-child
    install-alarm
    sound
