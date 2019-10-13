@@ -527,6 +527,35 @@ headers
 " ISO8859-1" encode-string    " character-set" property
 0 0  encode-bytes  " iso6429-1983-colors"  property
 
+new-device
+   " ports" device-name
+   1 " #address-cells" integer-property
+   0 " #size-cells" integer-property
+
+   : decode-unit  ( adr len -- phys )  $number  if  0  then  ;
+   : encode-unit  ( phys -- adr len )  (u.)  ;
+   : open  ( -- true )  true  ;
+   : close  ( -- )  ;
+
+   \ VGA port
+   new-device
+      " port" device-name
+      0 " reg" integer-property
+      new-device
+         " endpoint" device-name
+      finish-device
+   finish-device
+
+   \ LCD port
+   new-device
+      " port" device-name
+      1 " reg" integer-property
+      new-device
+         " endpoint" device-name
+      finish-device
+   finish-device
+finish-device
+
 \ LICENSE_BEGIN
 \ Copyright (c) 2006 FirmWorks
 \ 
