@@ -38,6 +38,8 @@ here screen-info - constant /screen-info
 
 
 h# 9.0000 constant linux-params
+h# 9.5000 constant setup-dtb
+h# 0.5000 constant /fdt-max
 h# 10.0000 value linux-base
 : code16-size  ( -- #bytes )   load-base h# 1f1 + c@ 1+  d# 512 *   ;
 0 value cmdline-offset
@@ -166,6 +168,20 @@ d# 20 constant /root-dev-buf
    drop
 ;
 
+[ifdef] flatten-device-tree
+: make-dtb  ( -- )
+   \ Link to the previous setup_data if any
+   h# 250 +lp  l@  setup-dtb        l!
+   h# 254 +lp  l@  setup-dtb h# 4 + l!
+   setup-dtb  h# 250 +lp  l!
+   0          h# 254 +lp  l!
+
+   d# 2      setup-dtb h# 08 +  l!  \ type = SETUP_DTB
+   /fdt-max  setup-dtb h# 0c +  l!  \ size = /fdt-max
+   setup-dtb h# 10 +  /fdt-max  flatten-device-tree
+;
+[then]
+
 : linux-fixup  ( -- )
 [ifdef] linux-logo  linux-logo  [then]
    args-buf cscount set-parameters          ( )
@@ -174,6 +190,7 @@ d# 20 constant /root-dev-buf
 
    linux-base  linux-params  (init-program)
    linux-params to %esi
+   [ifdef] make-dtb       make-dtb       [then]
    [ifdef] make-ofw-pdir  make-ofw-pdir  [then]
    linux-hook
 ;
