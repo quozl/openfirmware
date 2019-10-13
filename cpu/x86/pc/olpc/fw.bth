@@ -599,6 +599,11 @@ true                               ' client-symbols?  set-config-int-default
    then
 ;
 
+: camera-dt-fixup
+   " /camera/port/endpoint" " /image-sensor/port/endpoint"
+      ['] link-endpoints catch  if  2drop 2drop  then
+;
+
 : startup  ( -- )
    standalone?  0=  if  exit  then
 
@@ -625,6 +630,7 @@ true                               ' client-symbols?  set-config-int-default
    " probe-" do-drop-in
 
    probe-pci
+   camera-dt-fixup
    show-child
    install-alarm
    sound
