@@ -10,11 +10,9 @@ new-device
    d# 64 " granularity" integer-property
 finish-device
 
-new-device
-   " panel" device-name
+fload ${BP}/dev/olpc/panel.fth
+dev /panel
    " mrvl,dumb-panel" +compatible
-   " simple-panel" +compatible
-   " innolux,ls075at011" +compatible
 
    " OLPC DCON panel" model
    : +i  encode-int encode+  ;
@@ -35,16 +33,6 @@ new-device
 \ so the high nibble changed from 4 (MMP2) to 2 (MMP3) for the same
 \ field value 1.
 [ifdef] mmp3  h# 20001102  [else]  h# 40001102  [then]  " clock-divider-regval" integer-property
-
-   new-device
-      " port" device-name
-      new-device
-         " endpoint" device-name
-         \ " /dcon-i2c/dcon@d/ports/port@1/endpoint" encode-phandle " remote-endpoint" property
-      finish-device
-   finish-device
-
-finish-device
 device-end
 
 [ifdef] has-dcon
