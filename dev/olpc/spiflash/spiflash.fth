@@ -332,6 +332,9 @@ create jedec-spi-table
    h# 8e25bf ,  h# 10.0000 ,  ," SST25VF080B" \ SST      (AB-ID is bf)
    \ ST M25P80 does not support the JEDEC ID command (AB-ID is 13)
 
+   \ Dell Ariel
+   h# 1640ef ,  h# 40.0000 ,  ," W25Q32FV"    \ Winbond 3V3
+
    0 ,   \ End of list
 
 \ I don't think this table will ever be used, because the only part
