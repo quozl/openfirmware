@@ -2,16 +2,15 @@
 purpose: Create a device node for a TWSI device based on stack arguments
 
 \ Put the following on the stack prior to floading this file:
-\     ( phys-addr     clk irq  mux? fast? linux-unit# )
-\ E.g:  h# d4011000     1   7 false true     2
+\     ( phys-addr     clk irq  mux? )
+\ E.g:  h# d4011000     1   7 false
 
 root-device
 new-device
 
-" linux,unit#" integer-property                    ( baseadr clock# irq# muxed-irq? fast? )
-" i2c" name                                        ( baseadr clock# irq# muxed-irq? fast? )
-" mrvl,mmp-twsi" +compatible                       ( baseadr clock# irq# muxed-irq? fast? )
-[if]  0 0  " mrvl,i2c-fast-mode" property  [then]  ( baseadr clock# irq# muxed-irq? )
+" i2c" name                                        ( baseadr clock# irq# muxed-irq? )
+" mrvl,mmp-twsi" +compatible                       ( baseadr clock# irq# muxed-irq? )
+0 0  " mrvl,i2c-fast-mode" property                ( baseadr clock# irq# muxed-irq? )
 [if]
    " /interrupt-controller@158" encode-phandle " interrupt-parent" property
 [then]                                             ( baseadr clock# irq# )

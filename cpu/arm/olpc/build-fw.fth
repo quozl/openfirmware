@@ -111,7 +111,42 @@ fload ${BP}/cpu/arm/mmp2/watchdog.fth	\ reset-all using watchdog timer
 fload ${BP}/cpu/arm/olpc/smbus.fth         \ Bit-banged SMBUS (I2C) using GPIOs
 
 fload ${BP}/cpu/arm/olpc/gpio-i2c.fth
-fload ${BP}/cpu/arm/olpc/twsi-i2c.fth
+
+\ The unit# properties are chosen so that GPIO I2C nodes get lower addresses.
+\ Some Linux drivers expect to find devices on specific I2C bus numbers.
+fload ${BP}/cpu/arm/mmp2/twsi-i2c.fth
+devalias i2c2 /i2c@d4011000
+dev /i2c@d4011000
+   2 " linux,unit#" integer-property
+device-end
+devalias i2c3 /i2c@d4031000
+dev /i2c@d4031000
+   3 " linux,unit#" integer-property
+device-end
+dev /i2c@d4032000
+   " disabled" " status" string-property
+device-end
+devalias i2c5 /i2c@d4033000
+dev /i2c@d4033000
+   5 " linux,unit#" integer-property
+device-end
+dev /i2c@d4033800
+   " disabled" " status" string-property
+device-end
+devalias i2c4 /i2c@d4034000
+dev /i2c@d4034000
+   4 " linux,unit#" integer-property
+device-end
+
+[ifdef] soon-olpc-cl2  \ this breaks cl4-a1 boards, which ofw calls cl2.
+dev /i2c@d4033000  \ TWSI4
+new-device
+   h# 30 1 reg
+   " touchscreen" name
+   " raydium_ts" +compatible
+finish-device
+device-end
+[then]
 
 0 0  " d4018000"  " /" begin-package  \ UART3
    fload ${BP}/cpu/arm/mmp2/uart.fth
