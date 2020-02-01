@@ -5,7 +5,9 @@ purpose: MMP2 clock management
 d#  27 constant mmp2-usb-pll-clk#
 d#  60 constant mmp2-twsi0-clk#
 d#  61 constant mmp2-twsi1-clk#
+d#  62 constant mmp2-twsi2-clk#
 d#  63 constant mmp2-twsi3-clk#
+d#  64 constant mmp2-twsi4-clk#
 d#  65 constant mmp2-twsi5-clk#
 d#  66 constant mmp2-gpio-clk#
 d#  68 constant mmp2-rtc-clk#
@@ -57,7 +59,9 @@ h# d401.5000 encode-int encode+  h# 1000 encode-int encode+
 \            value   clr-mask  reg
 : twsi0-clk  h#   3  h#  77    h#  04 +apbc ;
 : twsi1-clk  h#   3  h#  77    h#  08 +apbc ;
+: twsi2-clk  h#   3  h#  77    h#  0c +apbc ;
 : twsi3-clk  h#   3  h#  77    h#  10 +apbc ;
+: twsi4-clk  h#   3  h#  77    h#  7c +apbc ;
 : twsi5-clk  h#   3  h#  77    h#  80 +apbc ;
 : sdh0-clk   h# 41b  h#  1b    h# 054 +pmua ;
 : sdh1-clk   h#  1b  h#  1b    h# 058 +pmua ;
@@ -206,7 +210,9 @@ h# 240 constant audio-sram-pwr
 : on/off  ( on? clock# -- )
    dup mmp2-twsi0-clk#  =  if drop  twsi0-clk generic-on/off  exit then
    dup mmp2-twsi1-clk#  =  if drop  twsi1-clk generic-on/off  exit then
+   dup mmp2-twsi2-clk#  =  if drop  twsi2-clk generic-on/off  exit then
    dup mmp2-twsi3-clk#  =  if drop  twsi3-clk generic-on/off  exit then
+   dup mmp2-twsi4-clk#  =  if drop  twsi4-clk generic-on/off  exit then
    dup mmp2-twsi5-clk#  =  if drop  twsi5-clk generic-on/off  exit then
    dup mmp2-sdh0-clk#   =  if drop  sdh0-clk  generic-on/off  exit then
    dup mmp2-sdh1-clk#   =  if drop  sdh1-clk  generic-on/off  exit then
