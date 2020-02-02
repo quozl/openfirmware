@@ -18,6 +18,7 @@ d#  76 constant mmp2-uart3-clk#
 d#  77 constant mmp2-ssp0-clk#
 d#  78 constant mmp2-ssp1-clk#
 d#  79 constant mmp2-ssp2-clk#
+d#  80 constant mmp2-ssp3-clk#
 d#  81 constant mmp2-timer-clk#
 d# 106 constant mmp2-disp0-clk#
 d# 101 constant mmp2-sdh0-clk#
