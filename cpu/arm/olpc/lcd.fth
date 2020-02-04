@@ -27,7 +27,7 @@ purpose: Display driver for OLPC ARM/MMP platforms
       " port" device-name
       new-device
          " endpoint" device-name
-         d# 18 " bus-width" integer-property
+         bpp d# 24 <  if  d# 18 " bus-width" integer-property  then
       finish-device
    finish-device
 
@@ -72,11 +72,18 @@ width >bytes constant /scanline
    
    vfp vbp wljoin  h# 120 lcd!
    h# 2000FF00 h# 194 lcd!  \ DMA CTRL 1
-   h# 2000000d h# 1b8 lcd!  \ Dumb panel controller - 18 bit RGB666 on LDD[17:0]
+
+   \ Dumb panel controller - 24 bit RGB888 on LDD[23:0] or 18 bit RGB666 on LDD[17:0]
+   bpp d# 24 >=  if  h# 6000000d  else  h# 2000000d  then h# 1b8 lcd!
+
    h# 01330133 h# 13c lcd!  \ Panel VSYNC Pulse Pixel Edge Control
    clkdiv      h# 1a8 lcd!  \ Clock divider
-\  h# 08021100 h# 190 lcd!  \ DMA CTRL 0 - enable DMA, 24 bpp mode
-   h# 08001100 h# 190 lcd!  \ DMA CTRL 0 - enable DMA, 16 bpp mode
+
+   \ DMA CTRL 0 - enable DMA
+   h# 08001100
+   bpp d# 32 =  if  h# 00040000 or  then
+   bpp d# 24 =  if  h# 00020000 or  then
+   h# 190 lcd!
 ;
 
 : normal-hsv  ( -- )
@@ -104,7 +111,6 @@ width >bytes constant /scanline
    hdisp third - 2/               ( w h x )    \ X centering offset
    vdisp third - 2/               ( w h x y )  \ Y centering offset
    wljoin h# 0e8 lcd!             ( w h )
-
    wljoin dup h# 0ec lcd!         ( h.w )  \ Source size
    h# 0f0 lcd!                    ( )      \ Zoomed size
 ;
@@ -142,7 +148,7 @@ defer foo ' noop to foo
 : start-video  ( adr w h ycrcb? -- )
    >r                                    ( adr w h r: ycrcb? )
    clear-unused-regs  normal-hsv         ( adr w h r: ycrcb? )
-   over  2* h# 0e0 lcd!                  ( adr w h r: ycrcb? )  \ Pitch - width * 2 bytes/pixel for RGB565, width for YCrCr4:2:2
+   over bytes/pixel * h# 0e0 lcd!        ( adr w h r: ycrcb? )  \ Pitch - width * 2 bytes/pixel for RGB565, width for YCrCr4:2:2
    placement                             ( adr r: ycrcb? )
    set-video-dma-adr                     ( r: ycrcb? )  \ Video buffer
    r> if  h# 50.000e  else  0  then  set-video-mode  ( )
@@ -347,13 +353,16 @@ d# 256 constant /cursor
             " simple-framebuffer" +compatible
 
             fb-mem-va >physical  encode-int
-            vdisp hdisp * 2 *  encode-int encode+
+            vdisp hdisp * bytes/pixel *  encode-int encode+
             " reg" property
 
             hdisp " width" integer-property
             vdisp " height" integer-property
-            hdisp 2 * " stride" integer-property
-            " r5g6b5" " format" string-property
+            hdisp bytes/pixel * " stride" integer-property
+            bpp d# 32 =  if  " a8r8g8b8"  then
+            bpp d# 24 =  if  " r8g8b8"    then
+            bpp d# 16 =  if  " r5g6b5"    then
+            " format" string-property
             " /display" encode-phandle " display" property
 
             " /clocks" encode-phandle mmp2-disp0-clk# encode-int encode+
