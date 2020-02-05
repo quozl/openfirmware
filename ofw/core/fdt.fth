@@ -54,6 +54,7 @@ purpose: Construct a flattened device tree blob for Linux
 
 : flatten-path  ( -- )
    the-node phandle>devname       ( adr len )
+   [char] / split-after 2drop     ( adr len )
    fdt$,  0 fdt-c,  4 fdt-align   ( )
 ;
 : (flatten-property)  ( propname$ propvalue$ -- )
