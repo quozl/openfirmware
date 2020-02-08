@@ -1,5 +1,8 @@
    " uart" name
+[ifdef] olpc
    " mrvl,mmp-uart" +compatible
+[then]
+   " intel,xscale-uart" +compatible
    my-space  h# 20  reg
 
    2 " reg-shift" integer-property
