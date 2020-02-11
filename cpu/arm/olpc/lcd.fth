@@ -414,15 +414,6 @@ end-package
 
 devalias screen /display
    
-[ifdef] use-small-font
-create cp881-16  " ${BP}/ofw/termemu/cp881-16.obf" $file,
-' cp881-16 to romfont
-[else]
-create 15x30pc  " ${BP}/ofw/termemu/15x30pc.psf" $file,
-' 15x30pc to romfont
-[then]
-
-
 \ LICENSE_BEGIN
 \ Copyright (c) 2010 FirmWorks
 \ 

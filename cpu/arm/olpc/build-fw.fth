@@ -301,6 +301,15 @@ fload ${BP}/cpu/x86/pc/olpc/setwp.fth
 end-package
 
 fload ${BP}/cpu/arm/olpc/lcd.fth
+
+[ifdef] use-small-font
+create cp881-16  " ${BP}/ofw/termemu/cp881-16.obf" $file,
+' cp881-16 to romfont
+[else]
+create 15x30pc  " ${BP}/ofw/termemu/15x30pc.psf" $file,
+' 15x30pc to romfont
+[then]
+
 [ifdef] mmp2
 fload ${BP}/cpu/arm/mmp2/galcore.fth
 [then]
