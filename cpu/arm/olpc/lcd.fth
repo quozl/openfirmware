@@ -311,10 +311,12 @@ d# 256 constant /cursor
 
    defer init-panel    ' noop to init-panel
 
+   [ifdef] olpc
    \ XXX we really should bounce these through the panel node(s)
    : bright!  " bright!" $call-dcon  ;
    : backlight-off  " backlight-off" $call-dcon  ;
    : backlight-on   " backlight-on" $call-dcon  ;
+   [then]
 
    : display-on
       init-panel  \ Turns on DCON etc
