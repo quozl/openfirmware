@@ -4,8 +4,8 @@ h# ff    ff     0  rgb>565 constant lf_fg    \ yellow
 h#  0     0     0  rgb>565 constant lf_bg    \ black
 
 \ screen size constant
-d# 128 constant lf_width
-d#  95 constant lf_height
+[ifdef] hdisp  hdisp d# 45 - d# 9 /  [else]  d# 128  [then]  constant lf_width
+[ifdef] vdisp  vdisp d# 45 - d# 9 /  [else]  d#  95  [then]  constant lf_height
 
 \ board and working area
 lf_width lf_height * constant /board
