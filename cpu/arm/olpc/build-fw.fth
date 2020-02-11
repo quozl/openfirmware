@@ -300,6 +300,7 @@ fload ${BP}/cpu/x86/pc/olpc/setwp.fth
    d# 26 " interrupts" integer-property
 end-package
 
+fload ${BP}/cpu/arm/olpc/lcdcfg.fth
 fload ${BP}/cpu/arm/olpc/lcd.fth
 
 [ifdef] use-small-font
