@@ -44,6 +44,7 @@ end-package
    5 interrupt-handler!                ( )
    5 enable-interrupt                  ( )
 ;
+[ifdef] strp
 : wake1  ( -- )  ['] cancel-alarm 1 rtc-wake  ;
 : wake2  ( -- )  ['] cancel-alarm 2 rtc-wake  ;
 : alarm-in-3  ( -- )  ['] take-alarm 3 rtc-wake  ;
@@ -81,6 +82,7 @@ d# -250 constant suspend-power-limit
       ." OKAY"  cr drop  false                              ( error? )
    then                                                     ( error? )
 ;
+[then]
 
 \ LICENSE_BEGIN
 \ Copyright (c) 2011 FirmWorks
