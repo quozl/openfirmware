@@ -12,7 +12,9 @@ purpose: USB features common to most OLPC ARM platforms
    " /clocks" encode-phandle mmp2-usb-clk# encode-int encode+ " clocks" property
    d# 44 " interrupts" integer-property
 
+[ifdef] usb-hub-reset-gpio#
    usb-hub-reset-gpio# 1  " usb-hub-reset-gpios" gpio-property
+[then]
 
    " usb" " phy-names" string-property
    " /usb2-phy" encode-phandle " phys" property
