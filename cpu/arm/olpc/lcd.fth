@@ -67,9 +67,8 @@ width >bytes constant /scanline
 
    htotal >chunks  vtotal wljoin  h# 114 lcd!  \ SPUT_V_H_TOTAL
 
-   htotal >chunks  hdisp -  hbp >chunks -  6 -  ( low )
-   hbp >chunks  wljoin  h# 11c lcd!
-   
+   hfp >chunks  hbp >chunks  wljoin  h# 11c lcd!
+
    vfp vbp wljoin  h# 120 lcd!
    h# 2000FF00 h# 194 lcd!  \ DMA CTRL 1
 
