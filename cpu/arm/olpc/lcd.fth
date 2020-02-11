@@ -7,7 +7,11 @@ purpose: Display driver for OLPC ARM/MMP platforms
 
    " mrvl,pxa168fb" +compatible
    " marvell,armada-lcdc" +compatible
+[ifdef] mmp3
+   " marvell,mmp3-lcd" +compatible
+[else]
    " marvell,mmp2-lcd" +compatible
+[then]
 
    " periph" encode-string
    " ext_ref_clk0" encode-string encode+
