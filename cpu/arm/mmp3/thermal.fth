@@ -213,7 +213,9 @@ h# 0400.0d00 value ts-watchdog-mask  \ 100.5C
    1 ts@  gc>c  .c.c  \ FIXME: show <n and >n too here
    2 ts@  gc>c  .c.c
    ." cpu: "  cpu-temperature  .c
+[ifdef] .bat-temp
    ." battery: "  .bat-temp  ." C "
+[then]
    pop-base
 ;
 
