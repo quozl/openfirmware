@@ -51,6 +51,7 @@ dev /
 dend
 
 : irqdef ( irq# -- )
+  " interrupts" delete-property
   0 encode-int
   rot encode-int encode+
   4 encode-int encode+
