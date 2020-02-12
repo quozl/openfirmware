@@ -89,13 +89,9 @@ warning !
 
 fload ${BP}/cpu/arm/mmp2/watchdog.fth	\ reset-all using watchdog timer
 
-0 0  " d4018000"  " /" begin-package  \ UART3
-   fload ${BP}/cpu/arm/mmp2/uart.fth
-   " /clocks" encode-phandle mmp2-uart2-clk# encode-int encode+ " clocks" property
-   d# 24 " interrupts" integer-property
-   1 " linux,unit#" integer-property
-end-package
-devalias com1 /uart
+fload ${BP}/cpu/arm/mmp2/uart.fth
+
+devalias com1 /uart@d4018000
 : com1  " com1"  ;
 ' com1 is fallback-device   
 

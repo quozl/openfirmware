@@ -1,25 +1,25 @@
-   " uart" name
-[ifdef] olpc
-   " mrvl,mmp-uart" +compatible
-[then]
-   " intel,xscale-uart" +compatible
-   my-space  h# 20  reg
+purpose: Device tree nodes for UARTs
 
-   2 " reg-shift" integer-property
+0 0  " d4018000"  " /" begin-package  \ UART3
+   fload ${BP}/cpu/arm/mmp2/uart-node.fth
+   " /clocks" encode-phandle mmp2-uart2-clk# encode-int encode+ " clocks" property
+   d# 24 " interrupts" integer-property
+end-package
 
-   : write  ( adr len -- actual )
-      0 max  tuck                    ( actual adr actual )
-      bounds  ?do  i c@ uemit  loop  ( actual )
-   ;
-   : read   ( adr len -- actual )
-      0=  if  drop 0  exit  then
-      ukey?  if           ( adr )
-         ukey swap c!  1  ( actual )
-      else                ( adr )
-         drop  -2         ( -2 )
-      then
-   ;
-   : open  ( -- okay? )  true  ;
-   : close  ( -- )   ;
-   : install-abort  ;
-   : remove-abort  ;
+0 0  " d4017000"  " /" begin-package  \ UART2
+   fload ${BP}/cpu/arm/mmp2/uart-node.fth
+   " /clocks" encode-phandle mmp2-uart1-clk# encode-int encode+ " clocks" property
+   d# 28 " interrupts" integer-property
+end-package
+
+0 0  " d4030000"  " /" begin-package  \ UART1
+   fload ${BP}/cpu/arm/mmp2/uart-node.fth
+   d# 27 " interrupts" integer-property
+   " /clocks" encode-phandle mmp2-uart0-clk# encode-int encode+ " clocks" property
+end-package
+
+0 0  " d4016000"  " /" begin-package  \ UART4
+   fload ${BP}/cpu/arm/mmp2/uart-node.fth
+   " /clocks" encode-phandle mmp2-uart3-clk# encode-int encode+ " clocks" property
+   d# 46 " interrupts" integer-property
+end-package
