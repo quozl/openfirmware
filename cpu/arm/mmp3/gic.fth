@@ -73,6 +73,11 @@ dev /usb                        h# 2c irqdef  dend
    dev /ap-sp                   h# 28 irqdef  dend
    dev /flash                   h# 00 irqdef  dend
    dev /ec-spi                  h# 14 irqdef  dend
+[else]
+   dev /spi@d4035000            h# 00 irqdef  dend
+   dev /spi@d4036000            h# 01 irqdef  dend
+   dev /spi@d4037000            h# 14 irqdef  dend
+   dev /spi@d4039000            h# 15 irqdef  dend
 [then]
 dev /sd/sdhci@d4280000          h# 27 irqdef  dend
 dev /sd/sdhci@d4280800          h# 34 irqdef  dend
