@@ -77,6 +77,7 @@ dev /usb                        h# 2c irqdef  dend
 dev /sd/sdhci@d4280000          h# 27 irqdef  dend
 dev /sd/sdhci@d4280800          h# 34 irqdef  dend
 dev /sd/sdhci@d4281000          h# 35 irqdef  dend
+dev /sd/sdhci@d4281800          h# 36 irqdef  dend
 dev /display                    h# 29 irqdef  dend
 dev /vmeta                      h# 1a irqdef  dend
 dev /uart@d4016000              h# 2e irqdef  dend

@@ -1,59 +1,29 @@
-dev /sd  \ MMC1 - External SD
-   new-device
-      h# d428.0000 h# 800 reg
-      8 encode-int " bus-width" property
-      " sdhci-pxav3" +compatible
-      " mrvl,pxav3-mmc" +compatible
-      d# 15 encode-int " clk-delay-cycles" property
-      fload ${BP}/dev/mmc/sdhci/slot.fth
-      d# 39 " interrupts" integer-property
-      0 0 encode-bytes  " no-1-8-v" property
-      " /clocks" encode-phandle mmp2-sdh0-clk# encode-int encode+ " clocks" property
-      " io" " clock-names" string-property
-      d# 40 encode-int  1 encode-int encode+  " power-delay-ms" property
-      \ Active low
-      " /gpio" encode-phandle  d# 31 encode-int encode+  1 encode-int encode+  " cd-gpios"  property
-      \ Active low
-      " /gpio" encode-phandle  sd-pwroff-gpio# encode-int encode+  1 encode-int encode+  " power-gpios" property
+dev /sdhci@d4280000  \ MMC1 - External SD
+   \ Active low
+   " /gpio" encode-phandle  d# 31 encode-int encode+  1 encode-int encode+  " cd-gpios"  property
+   \ Active low
+   " /gpio" encode-phandle  sd-pwroff-gpio# encode-int encode+  1 encode-int encode+  " power-gpios" property
 
-      \ MMP3 
-      0 0  " wp-inverted" property
-      : write-protected?  ( -- flag )  write-protected? 0=  ;
-
-      new-device
-         fload ${BP}/dev/mmc/sdhci/sdmmc.fth
-         fload ${BP}/dev/mmc/sdhci/selftest.fth
-         " external" " slot-name" string-property
-      finish-device
-   finish-device
+   \ MMP3
+   0 0  " wp-inverted" property
+   : write-protected?  ( -- flag )  write-protected? 0=  ;
 device-end
 
-dev /sd  \ MMC5 - internal micro-SD
+dev /sdhci@d4217000  \ MMC5 - internal micro-SD
+   8 encode-int " bus-width" property
+   d# 15 encode-int " clk-delay-cycles" property
+
+   \ The media is considered non-removable (at run-time) since the slot is
+   \ only accessible on the motherboard, and a heatsink must be removed to
+   \ access it.
+   0 0 " non-removable" property
+   d# 40 encode-int  1 encode-int encode+  " power-delay-ms" property
+   0 0 " broken-cd" property
+
    new-device
-      h# d421.7000 h# 800 reg
-
-      8 encode-int " bus-width" property
-      " sdhci-pxav3" +compatible
-      " mrvl,pxav3-mmc" +compatible
-      d# 15 encode-int " clk-delay-cycles" property
-      fload ${BP}/dev/mmc/sdhci/slot.fth
-      " /interrupt-controller@184" encode-phandle " interrupt-parent" property
-      d# 0 " interrupts" integer-property
-
-      \ The media is considered non-removable (at run-time) since the slot is
-      \ only accessible on the motherboard, and a heatsink must be removed to
-      \ access it.
-      0 0 " non-removable" property
-      " /clocks" encode-phandle mmp3-sdh4-clk# encode-int encode+ " clocks" property
-      " io" " clock-names" string-property
-      d# 40 encode-int  1 encode-int encode+  " power-delay-ms" property
-      0 0 " broken-cd" property
-
-      new-device
-         fload ${BP}/dev/mmc/sdhci/sdmmc.fth
-         fload ${BP}/dev/mmc/sdhci/selftest.fth
-         " internal" " slot-name" string-property
-      finish-device
+      fload ${BP}/dev/mmc/sdhci/sdmmc.fth
+      fload ${BP}/dev/mmc/sdhci/selftest.fth
+      " internal" " slot-name" string-property
    finish-device
 device-end
 
