@@ -67,7 +67,7 @@ dev /interrupt-controller@1d0   gicparent  dend
 
 \ modify irqs to use 3 cells instead of 1
 dev /timer                      h# 0d irqdef  dend
-dev /usb                        h# 2c irqdef  dend
+dev /usb@d4208000               h# 2c irqdef  dend
 [ifdef] olpc
    dev /sspa                    h# 03 irqdef  dend
    dev /ap-sp                   h# 28 irqdef  dend
@@ -78,6 +78,7 @@ dev /usb                        h# 2c irqdef  dend
    dev /spi@d4036000            h# 01 irqdef  dend
    dev /spi@d4037000            h# 14 irqdef  dend
    dev /spi@d4039000            h# 15 irqdef  dend
+   dev /usb@f0001000            h# 16 irqdef  dend
 [then]
 dev /sd/sdhci@d4280000          h# 27 irqdef  dend
 dev /sd/sdhci@d4280800          h# 34 irqdef  dend
