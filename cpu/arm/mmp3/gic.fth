@@ -14,6 +14,28 @@ purpose: Generic Interrupt Controller node for Marvell MMP3
   : decode-unit  ( adr len -- phys )  push-hex $number if 0  then pop-base  ;
 end-package
 
+0 0  " e0000600" " /" begin-package
+   " local-timer" device-name
+   " arm,arm11mp-twd-timer" +compatible
+   my-address my-space  h# 20 reg
+
+   1 encode-int \ Per-processor interrupt
+      d# 13 encode-int encode+
+      h# 301 encode-int encode+ \ GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_EDGE_RISING
+      " interrupts" property
+end-package
+
+0 0  " e0000620" " /" begin-package
+   " watchdog" device-name
+   " arm,arm11mp-twd-wdt" +compatible
+   my-address my-space  h# 20 reg
+
+   1 encode-int \ Per-processor interrupt
+      d# 14 encode-int encode+
+      h# 301 encode-int encode+ \ GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_EDGE_RISING
+      " interrupts" property
+end-package
+
 : gicparent ( -- )
    " interrupt-parent" delete-property
    " /interrupt-controller@e0001000" encode-phandle " interrupt-parent" property
@@ -76,5 +98,9 @@ dev /interrupt-controller@1c4   d# 18 irqdef  dend
 dev /interrupt-controller@1c8   d# 30 irqdef  dend
 dev /interrupt-controller@1cc   d# 42 irqdef  dend
 dev /interrupt-controller@1d0   d# 58 irqdef  dend
+
+\ Enable the TWD timer
+\ PMUA_CC3_PJ |= PJ4_MP_TIMER_RST | PJ4_MP_TIMER_CLK_EN
+standalone? if  h# 18 h# 188 pmua-set  then
 
 : mmp3-gic  ;  \ 92ms
