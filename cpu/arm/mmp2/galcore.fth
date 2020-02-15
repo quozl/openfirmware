@@ -11,7 +11,7 @@ new-device
    8 encode-int " interrupts" property
    " /interrupt-controller" encode-phandle " interrupt-parent" property
 
-   " /clocks" encode-phandle mmp2-gpu-gc-clk# encode-int encode+
+   " /clocks" encode-phandle mmp2-gpu-3d-clk# encode-int encode+
    " /clocks" encode-phandle encode+ mmp2-gpu-bus-clk# encode-int encode+
    " clocks" property
 

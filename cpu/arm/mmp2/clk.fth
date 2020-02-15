@@ -25,10 +25,9 @@ d# 104 constant mmp2-sdh3-clk#
 d# 105 constant mmp2-usb-clk#
 d# 112 constant mmp2-ccic0-clk#
 d# 120 constant mmp2-disp0-lcdc-clk#
-d# 121 constant mmp2-gpu-gc-mux-clk#
-d# 122 constant mmp2-gpu-gc-clk#
-d# 123 constant mmp2-gpu-bus-mux-clk#
-d# 124 constant mmp2-gpu-bus-clk#
+d# 123 constant mmp2-gpu-bus-clk#
+d# 124 constant mmp2-gpu-3d-clk#
+d# 125 constant mmp3-gpu-2d-clk#
 
 \ From include/dt-bindings/power/marvell,mmp2.h
 d# 0 constant mmp2-gpu-power-domain#
