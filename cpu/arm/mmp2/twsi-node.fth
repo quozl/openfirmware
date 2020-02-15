@@ -13,7 +13,7 @@ new-device
 " mrvl,mmp-twsi" +compatible                       ( baseadr clock# irq# muxed-irq? fast? )
 [if]  0 0  " mrvl,i2c-fast-mode" property  [then]  ( baseadr clock# irq# muxed-irq? )
 [if]
-   " /interrupt-controller/interrupt-controller@158" encode-phandle " interrupt-parent" property
+   " /interrupt-controller@158" encode-phandle " interrupt-parent" property
 [then]                                             ( baseadr clock# irq# )
 " interrupts" integer-property                     ( baseadr clock# )
 

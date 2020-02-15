@@ -406,8 +406,8 @@ warning @ warning off
       ['] ec-name$  catch  0=  if  " ec-name" string-property  then
       ['] ec-date$  catch  0=  if  " ec-date" string-property  then
       ['] ec-user$  catch  0=  if  " ec-user" string-property  then
-      " /interrupt-controller" encode-phandle " interrupt-parent" property
-\      " /interrupt-controller"  find-package  if
+      " /interrupt-controller@d4282000" encode-phandle " interrupt-parent" property
+\      " /interrupt-controller@d4282000"  find-package  if
 \         " interrupt-parent" integer-property
 \      then
       0 0 " ranges" property

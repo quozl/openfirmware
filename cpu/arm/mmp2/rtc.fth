@@ -7,7 +7,7 @@ purpose: Driver for MMP2 internal RTC
    my-address my-space  h# 1000 reg
 
    d# 1 encode-int  0 encode-int encode+ " interrupts" property
-   " /interrupt-controller/interrupt-controller@154" encode-phandle " interrupt-parent" property
+   " /interrupt-controller@154" encode-phandle " interrupt-parent" property
 
    " rtc 1Hz" encode-string " rtc alarm" encode-string  encode+ " interrupt-names" property
          

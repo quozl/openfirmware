@@ -6,7 +6,7 @@
    " /clocks" encode-phandle mmp2-ccic0-clk# encode-int encode+ " clocks" property
 [ifdef] mmp3
    \ The CCIC interrupt is shared between CCIC1 and CCIC2 on MMP3
-   " /interrupt-controller/interrupt-controller@1cc" encode-phandle " interrupt-parent" property
+   " /interrupt-controller@1cc" encode-phandle " interrupt-parent" property
    1 " interrupts" integer-property
 [else]
    d# 42 " interrupts" integer-property

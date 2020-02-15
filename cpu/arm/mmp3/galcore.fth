@@ -11,7 +11,7 @@ new-device
    " vivante,gc" +compatible
    gpu-3d-pa /gpu reg
    0 encode-int " interrupts" property
-   " /interrupt-controller/interrupt-controller@1c0" encode-phandle " interrupt-parent" property
+   " /interrupt-controller@1c0" encode-phandle " interrupt-parent" property
 
    " /clocks" encode-phandle mmp2-gpu-3d-clk# encode-int encode+
       " /clocks" encode-phandle encode+ mmp2-gpu-3d-clk# encode-int encode+
@@ -31,7 +31,7 @@ new-device
    " vivante,gc" +compatible
    gpu-2d-pa /gpu reg
    2 encode-int " interrupts" property
-   " /interrupt-controller/interrupt-controller@1c0" encode-phandle " interrupt-parent" property
+   " /interrupt-controller@1c0" encode-phandle " interrupt-parent" property
 
    " /clocks" encode-phandle mmp3-gpu-2d-clk# encode-int encode+
       " /clocks" encode-phandle encode+ mmp2-gpu-bus-clk# encode-int encode+

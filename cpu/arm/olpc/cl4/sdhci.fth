@@ -37,7 +37,7 @@ dev /sd  \ MMC5 - internal micro-SD
       " mrvl,pxav3-mmc" +compatible
       d# 15 encode-int " clk-delay-cycles" property
       fload ${BP}/dev/mmc/sdhci/slot.fth
-      " /interrupt-controller/interrupt-controller@184" encode-phandle " interrupt-parent" property
+      " /interrupt-controller@184" encode-phandle " interrupt-parent" property
       d# 0 " interrupts" integer-property
 
       \ The media is considered non-removable (at run-time) since the slot is

@@ -9,7 +9,6 @@ new-device
    " vivante,gc" +compatible
    gpu-pa /gpu reg
    8 encode-int " interrupts" property
-   " /interrupt-controller" encode-phandle " interrupt-parent" property
 
    " /clocks" encode-phandle mmp2-gpu-3d-clk# encode-int encode+
    " /clocks" encode-phandle encode+ mmp2-gpu-bus-clk# encode-int encode+
