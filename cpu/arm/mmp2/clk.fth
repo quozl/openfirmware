@@ -60,17 +60,17 @@ h# d401.5000 encode-int encode+  h# 1000 encode-int encode+
 1 " #reset-cells" integer-property
 1 " #power-domain-cells" integer-property
 
-\            value   clr-mask  reg
-: twsi0-clk  h#   3  h#  77    h#  04 +apbc ;
-: twsi1-clk  h#   3  h#  77    h#  08 +apbc ;
-: twsi2-clk  h#   3  h#  77    h#  0c +apbc ;
-: twsi3-clk  h#   3  h#  77    h#  10 +apbc ;
-: twsi4-clk  h#   3  h#  77    h#  7c +apbc ;
-: twsi5-clk  h#   3  h#  77    h#  80 +apbc ;
-: sdh0-clk   h# 41b  h#  1b    h# 054 +pmua ;
-: sdh1-clk   h#  1b  h#  1b    h# 058 +pmua ;
-: sdh2-clk   h#  1b  h#  1b    h# 0e8 +pmua ;
-: sdh3-clk   h#  1b  h#  1b    h# 0ec +pmua ;
+\            value  clr-mask  reg
+: twsi0-clk  h#  3  h# 77     h# 04 +apbc ;
+: twsi1-clk  h#  3  h# 77     h# 08 +apbc ;
+: twsi2-clk  h#  3  h# 77     h# 0c +apbc ;
+: twsi3-clk  h#  3  h# 77     h# 10 +apbc ;
+: twsi4-clk  h#  3  h# 77     h# 7c +apbc ;
+: twsi5-clk  h#  3  h# 77     h# 80 +apbc ;
+: sdh0-clk   h# 1b  h# 1b     h# 54 +pmua ;
+: sdh1-clk   h# 1b  h# 1b     h# 58 +pmua ;
+: sdh2-clk   h# 1b  h# 1b     h# e8 +pmua ;
+: sdh3-clk   h# 1b  h# 1b     h# ec +pmua ;
 
 : generic-on/off         ( on? value clr-mask reg )
    dup io@               ( on? value clr-mask reg reg-val )
