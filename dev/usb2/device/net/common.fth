@@ -19,7 +19,6 @@ false value use-multicast?
 
 defer init-nic         ( -- )			' noop to init-nic
 defer reset-nic        ( -- )			' noop to reset-nic
-defer wrap-msg         ( adr len -- adr' len' )	' noop to wrap-msg
 defer unwrap-msg       ( adr len -- adr' len' )	' noop to unwrap-msg
 defer link-up?	       ( -- up? )		' true to link-up?
 defer start-phy        ( -- )			' noop to start-phy
