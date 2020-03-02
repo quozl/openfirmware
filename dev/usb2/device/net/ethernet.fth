@@ -50,13 +50,11 @@ external
       tuck  outbuf 4 + swap  move             ( len )
       4 +                                     ( len' )
    else
-      length-header?  if           ( adr len )
-         dup outbuf le-w!          ( adr len )
-         tuck outbuf 2 + swap move ( len )
-         2 +                       ( len )
-      else
-         tuck outbuf swap move      ( len )
-      then                          ( len )
+      outbuf over length-header ( adr len hdrlen )
+      2dup +                    ( adr len hdrlen len' )
+      swap 2swap rot            ( len' adr len hdrlen )
+      outbuf +                  ( len' adr len adr' )
+      swap move                 ( len' )
    then
 ;
 

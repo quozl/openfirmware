@@ -31,6 +31,9 @@ defer mii!             ( val reg -- )           ' drop to mii@
 external
 defer promiscuous      ( -- )                   ' noop to promiscuous
 defer set-multicast    ( adr len -- )           ' 2drop to set-multicast
+
+: no-header  ( adr len -- hdrlen )  2drop 0  ;
+defer length-header ( adr len -- hdrlen )  ' no-header to length-header
 headers
 
 : phy-loopback{  ( -- )
@@ -51,8 +54,6 @@ headers
 
 0 value multi-packet?   \ True if a single USB transaction can
                         \ transfer multiple network packets, e.g. ax88772
-0 value length-header?  \ True if 16-bit little-endian length header is
-                        \ prefixed to outgoing frames (pegasus)
 
 0 value residue         \ Remaining bytes in the packet buffer
 0 value pkt-adr         \ Offset into the packet buffer
