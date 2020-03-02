@@ -36,10 +36,6 @@ headers
 external
 
 : copy-packet  ( adr len -- len' )
-   dup outbuf le-w!  tuck outbuf 2 + swap move  2 +
-;
-
-: copy-packet  ( adr len -- len' )
    dup multi-packet?  if  4 +  then   ( adr len len' )
    /outbuf >  if  ." USB Ethernet write packet too long" cr  stop-mac abort  then  ( adr len )
 
