@@ -69,7 +69,7 @@ decimal
 \ Defaults to public read permission, owner and group write permission.
 
 variable file-protection
--1 is file-protection  \ Use system default until overridden
+o# 666 is file-protection \ Use rw-rw-rw- until overridden
 
 \ Prepares a file for later access.  Name is the pathname of the file
 \ and mode is the mode (0 read, 1 write, 2 modify).  If the operation
