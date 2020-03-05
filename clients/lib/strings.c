@@ -193,7 +193,7 @@ void *memchr(const void *s, int c, size_t len)
 	const unsigned char *p = s;
 	while (len--) {
 		if (*p == (unsigned char)c)
-			return p;
+			return (void *)p;
 		p++;
 	}
 	return NULL;
