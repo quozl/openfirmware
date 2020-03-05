@@ -4,7 +4,7 @@
 #	      or just: make	
 #
 
-ifneq (arm, $(findstring arm,$(shell uname -p)))
+ifneq (arm, $(findstring arm,$(shell uname -m)))
   # Cross-compiler setup
 ifeq ($(CROSS),)
     CROSS=/usr/local/arm/arm-linux/bin/
