@@ -83,7 +83,7 @@ int color;	/* color to set */
 
 {
 	if (color == cfcolor)
-		return;
+		return(TRUE);
 	ttputc(ESC);
 	ttputc('[');
 	ansiparm(color+30);
@@ -105,7 +105,7 @@ int color;	/* color to set */
 
 {
 	if (color == cbcolor)
-		return;
+		return(TRUE);
 	ttputc(ESC);
 	ttputc('[');
 	ansiparm(color+40);
