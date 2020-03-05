@@ -3,7 +3,7 @@
 # -fno-builtin has the effect of suppressing some warnings about
 # functions that conflict with gcc builtins
 
-ifneq (arm, $(findstring arm,$(shell uname -p)))
+ifneq (arm, $(findstring arm,$(shell uname -m)))
 ifeq ($(CROSS),)
     CROSS=/usr/local/arm/arm-linux/bin/
 endif
