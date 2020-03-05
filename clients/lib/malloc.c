@@ -28,6 +28,7 @@
 
 #define MALLOC
 #include "malloc.h"
+#include "string.h"
 
 #ifdef debug
 # define ASSERT(p,q)	if (!(p)) fatal(q)
