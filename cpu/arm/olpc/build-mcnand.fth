@@ -12,7 +12,7 @@ purpose: Common code for fetching and building the NANDblaster support code
    " mv multicast-nand-${MCNAND_VERSION} multicast-nand" expand$ $sh
 [then]
 
-" (cd multicast-nand; make BPDIR=../../../../../.. OFW_CPU=arm nandblaster15_rx.bin nandblaster_tx.bin; cp nandblaster15_rx.bin nandblaster_tx.bin ..)" expand$ $sh
+" (cd multicast-nand; make BPDIR=../../../../../.. OFW_CPU=arm CC_OFW=${CROSS}gcc LD_OFW=${CROSS}ld STRIP_OFW=${CROSS}strip nandblaster15_rx.bin nandblaster_tx.bin; cp nandblaster15_rx.bin nandblaster_tx.bin ..)" expand$ $sh
 
 \ This forces the creation of a .log file, so we don't re-fetch
 writing mcastnand.version
