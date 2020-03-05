@@ -10,6 +10,7 @@
  */
 
 static int (*cif_handler)();
+extern int ofw_setup();
 extern void OFExit();
 
 void
