@@ -11,6 +11,8 @@ LIBDIR=$(HLIBDIR)/x86
 
 INCS=-I. -I$(SRCDIR) -I$(HLIBDIR)
 MODES=-g -m32 -fno-builtin -fno-stack-limit -fno-stack-protector
+MODES+=-Wno-implicit-function-declaration
+MODES+=-Wno-implicit-int
 CFLAGS= $(INCS) $(MODES)
 
 CC=		gcc

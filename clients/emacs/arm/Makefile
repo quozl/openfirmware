@@ -25,6 +25,8 @@ GLIBDIR=$(dir $(shell $(CC) -print-libgcc-file-name))
 
 INCS=-I. -I$(SRCDIR) -I$(HLIBDIR)
 MODES=-g -O2 -fno-inline -fno-pie
+MODES+=-Wno-implicit-function-declaration
+MODES+=-Wno-implicit-int
 CFLAGS= $(INCS) $(MODES)
 CFLAGS += -Wno-implicit-function-declaration
 CFLAGS += -Wno-implicit-int
