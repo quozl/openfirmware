@@ -2134,6 +2134,9 @@ c_getenv(char *str)
 	return((long)getenv(str));
 }
 
+#ifdef __linux__
+#include <time.h>
+#endif
 #ifdef SYS5
 #include <sys/time.h>
 #ifndef IRIS
