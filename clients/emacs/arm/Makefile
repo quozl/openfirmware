@@ -24,7 +24,7 @@ LIBDIR=$(HLIBDIR)/arm
 GLIBDIR=$(dir $(shell $(CC) -print-libgcc-file-name))
 
 INCS=-I. -I$(SRCDIR) -I$(HLIBDIR)
-MODES=-g -O2 -fno-inline
+MODES=-g -O2 -fno-inline -fno-pie
 CFLAGS= $(INCS) $(MODES)
 CFLAGS += -Wno-implicit-function-declaration
 CFLAGS += -Wno-implicit-int
