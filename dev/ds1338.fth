@@ -1,7 +1,4 @@
-purpose: Driver for external IDT1388 RTC chip on XO-1.75
-
-dev /i2c@d4031000  \ TWSI2
-new-device
+purpose: Driver for IDT1388 RTC chip
 
 " rtc" name
 " idt,idt1338-rtc" +compatible
@@ -117,6 +114,3 @@ headers
    d# 2011 < dup  if  ." Date in RTC is too early" cr  then	( -- flag )
    close
 ;
-
-finish-device
-device-end

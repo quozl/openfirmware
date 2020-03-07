@@ -122,6 +122,9 @@ device-end
 devalias i2c3 /i2c@d4031000
 dev /i2c@d4031000
    3 " linux,unit#" integer-property
+   new-device
+      fload ${BP}/dev/ds1338.fth
+   finish-device
 device-end
 dev /i2c@d4032000
    " disabled" " status" string-property
@@ -397,7 +400,6 @@ fload ${BP}/cpu/x86/adpcm.fth            \ ADPCM decoding
 d# 32 is playback-volume
 
 fload ${BP}/cpu/arm/olpc/sound.fth
-fload ${BP}/cpu/arm/olpc/rtc.fth
 stand-init: RTC
    " /i2c@d4031000/rtc" open-dev  clock-node !
    \ use RTC 32kHz clock as SoC external slow clock
