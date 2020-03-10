@@ -8,6 +8,7 @@ purpose: Driver for the MMP3 thermal sensor
 
    d# 11 encode-int " interrupts" property
    " /interrupt-controller@188" encode-phandle " interrupt-parent" property
+   0 " #thermal-sensor-cells" integer-property
 
    " /clocks" encode-phandle
       mmp2-thermal0-clk# encode-int encode+
