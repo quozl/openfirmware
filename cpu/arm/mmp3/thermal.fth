@@ -208,8 +208,8 @@ string-array tsense-regx-bits
    ," 21=auto_read_en"
 end-string-array
 
-: .tc  ( n -- )
-   dup .
+: .tc  ( n n -- )
+   .
    push-decimal
    gc>c .c.c
    pop-base
@@ -222,9 +222,9 @@ end-string-array
          i tsense-regx-bits count type space
       then
    loop cr
-   4 spaces dup 8 rshift h# f and ." wdog_tshld=" .tc cr
-   4 spaces dup 4 rshift h# f and ." int_tshld=" .tc cr
-   4 spaces dup          h# f and ." temp_value=" .tc cr
+   4 spaces dup dup 8 rshift h# f and ." wdog_tshld=" .tc cr
+   4 spaces dup dup 4 rshift h# f and ." int_tshld=" .tc cr
+   4 spaces dup dup          h# f and ." temp_value=" .tc cr
    drop
 ;
 
