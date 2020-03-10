@@ -19,6 +19,13 @@ my-address my-space h# 200.0010 + encode-phys encode+
 
 " reg" property
 
+new-device
+   " port" device-name
+   new-device
+      " endpoint" device-name
+   finish-device
+finish-device
+
 : my-w@  ( offset -- w )  my-space +  " config-w@" $call-parent  ;
 : my-w!  ( w offset -- )  my-space +  " config-w!" $call-parent  ;
 
@@ -65,6 +72,32 @@ h# 21 value camera-smb-slave
    2 ms
    smbus-wait
    bc cl@ drop
+;
+
+: set-sensor-properties  ( compatible$ i2c-addr -- )
+   " /camera/i2c-bus" find-package  if
+      drop 3drop exit
+   then
+
+   new-device
+      " i2c-bus" device-name
+
+      new-device
+         " image-sensor" device-name
+         " reg" integer-property        ( compatible$ )
+         " compatible" string-property  ( )
+
+         new-device
+            " port" device-name
+            new-device
+               " endpoint" device-name
+               h# 1 " hsync-active" integer-property
+               h# 1 " vsync-active" integer-property
+            finish-device
+         finish-device
+
+      finish-device
+   finish-device
 ;
 
 \ This must be headerless so evaluate won't find this version

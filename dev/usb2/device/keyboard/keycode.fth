@@ -27,13 +27,13 @@ create keymap 2 c,	\ # of submaps
 ( 18 )	ascii u c,  ascii v c,  ascii w c,  ascii x c,  ascii y c,  ascii z c,  ascii 1 c,  ascii 2 c,
 ( 20 )	ascii 3 c,  ascii 4 c,  ascii 5 c,  ascii 6 c,  ascii 7 c,  ascii 8 c,  ascii 9 c,  ascii 0 c,
 ( 28 )	0d c,       1b c,       08 c,       09 c,       20 c,       ascii - c,  ascii = c,  ascii [ c,
-( 30 )	ascii ] c,  ascii \ c,  xx          ascii ; c,  ascii ' c,  ascii ` c,  ascii , c,  ascii . c,
+( 30 )	ascii ] c,  ascii \ c,  ascii \ c,  ascii ; c,  ascii ' c,  ascii ` c,  ascii , c,  ascii . c,
 ( 38 )	ascii / c,  xx          xx          xx          xx          xx          xx          xx      
 ( 40 )	xx          xx          xx          xx          xx          xx          xx          xx      
 ( 48 )	xx          xx          xx          xx          7f c,       xx          0c c,       xx      
 ( 50 )	xx          xx          xx          xx          ascii / c,  ascii * c,  ascii - c,  ascii + c,
 ( 58 )	0d c,       ascii 1 c,  ascii 2 c,  ascii 3 c,  ascii 4 c,  ascii 5 c,  ascii 6 c,  ascii 7 c,
-( 60 )	ascii 8 c,  ascii 9 c,  ascii 0 c,  ascii . c,  xx          xx          xx          ascii = c,
+( 60 )	ascii 8 c,  ascii 9 c,  ascii 0 c,  ascii . c,  ascii \ c,  xx          xx          ascii = c,
 \ with shift key
 ( 00 )	xx          xx          xx          xx          ascii A c,  ascii B c,  ascii C c,  ascii D c,
 ( 08 )	ascii E c,  ascii F c,  ascii G c,  ascii H c,  ascii I c,  ascii J c,  ascii K c,  ascii L c,
@@ -41,13 +41,13 @@ create keymap 2 c,	\ # of submaps
 ( 18 )	ascii U c,  ascii V c,  ascii W c,  ascii X c,  ascii Y c,  ascii Z c,  ascii ! c,  ascii @ c,
 ( 20 )	ascii # c,  ascii $ c,  ascii % c,  ascii ^ c,  ascii & c,  ascii * c,  ascii ( c,  ascii ) c,
 ( 28 )	0d c,       1b c,       08 c,       09 c,       20 c,       ascii _ c,  ascii + c,  ascii { c,
-( 30 )	ascii } c,  ascii | c,  xx          ascii : c,  ascii " c,  ascii ~ c,  ascii < c,  ascii > c,
+( 30 )	ascii } c,  ascii | c,  ascii | c,  ascii : c,  ascii " c,  ascii ~ c,  ascii < c,  ascii > c,
 ( 38 )	ascii ? c,  xx          xx          xx          xx          xx          xx          xx      
 ( 40 )	xx          xx          xx          xx          xx          xx          xx          xx      
 ( 48 )	xx          xx          xx          xx          7f c,       xx          0c c,       xx      
 ( 50 )	xx          xx          xx          xx          ascii / c,  ascii * c,  ascii - c,  ascii + c,
 ( 58 )	0d c,       xx          xx          xx          xx          ascii 5 c,  xx          xx        
-( 60 )	xx          xx          xx          7f c,       xx          xx          xx          ascii = c,
+( 60 )	xx          xx          xx          7f c,       ascii | c,  xx          xx          ascii = c,
 		
 \ The escape sequences implied by the following three tables are as
 \ defined by the Windows NT "Portable Boot Loader" (formerly known

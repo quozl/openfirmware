@@ -3,7 +3,7 @@
 # -fno-builtin has the effect of suppressing some warnings about
 # functions that conflict with gcc builtins
 
-ifneq (arm, $(findstring arm,$(shell uname -p)))
+ifneq (arm, $(findstring arm,$(shell uname -m)))
 ifeq ($(CROSS),)
     CROSS=/usr/local/arm/arm-linux/bin/
 endif
@@ -13,7 +13,7 @@ else
   CC    := gcc
 endif
 
-CFLAGS = -I.. -O2 -mcpu=strongarm110 -fno-builtin
+CFLAGS = -I.. -O2 -mcpu=strongarm110 -fno-builtin -fno-pie
 ifeq (y, $(shell $(CC) -xc -c -fno-stack-protector /dev/null -o /dev/null 2>/dev/null && echo y))
   CFLAGS += -fno-stack-protector
 endif

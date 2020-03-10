@@ -3,6 +3,7 @@
 /* For gcc, compile with -fno-builtin to suppress warnings */
 
 #include "1275.h"
+#include "string.h"
 
 void *
 zalloc(size_t size)

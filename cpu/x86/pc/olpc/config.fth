@@ -43,6 +43,7 @@ create machine-signature ," CL1"
 : bundle-suffix$  ( -- adr len )  " 0"  ;
 
 fload ${BP}/cpu/x86/pc/olpc/addrs.fth
+fload ${BP}/cpu/x86/pc/olpc/gpiopins.fth
 
 \ LICENSE_BEGIN
 \ Copyright (c) 2006 FirmWorks

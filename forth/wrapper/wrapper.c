@@ -59,6 +59,9 @@ which is part of the Forth image file.
 #ifndef WIN32
 #include <sys/mman.h>
 #endif
+#ifdef __unix__
+#include <sys/ioctl.h>
+#endif
 
 /* 
  * The following #includes and externs fix GCC warnings when compiled with
@@ -253,7 +256,6 @@ typedef long quadlet;
 
 #ifdef BSD
 # include <sys/time.h>
-# include <sys/ioctl.h>	/* For FIONREAD */
 #endif
 
 #ifdef SYS5
@@ -2132,6 +2134,9 @@ c_getenv(char *str)
 	return((long)getenv(str));
 }
 
+#ifdef __linux__
+#include <time.h>
+#endif
 #ifdef SYS5
 #include <sys/time.h>
 #ifndef IRIS

@@ -42,7 +42,6 @@ d# 1024 instance value /scanline	\ Frame buffer line width
 : gp!  ( l reg -- )  gp-base + rl!  ;
 : gp@  ( reg -- l )  gp-base + rl@  ;
 
-
 : iand  ( value mask -- )  invert and  ;
 
 : map-frame-buffer  ( -- )
@@ -118,6 +117,20 @@ create timing-dcon
    h# 038f.0383 , h# 038f.0383 , h# 038b.0388 , ( h# 038a.0387 , )  \ vtiming 1,2,3,fp 
 
 true value dcon?
+[ifdef] $call-dcon
+: bright!        " bright!"       $call-dcon    ;
+: backlight-off  " backlight-off" $call-dcon    ;
+: backlight-on   " backlight-on"  $call-dcon    ;
+: set-source     " set-source"    $call-dcon    ;
+: probe-dcon     " probe-dcon"    $call-dcon    ;
+[else]
+false constant atest?
+: bright!        ( level -- )        drop       ;
+: backlight-off  ( -- )                         ;
+: backlight-on   ( -- )                         ;
+: set-source     ( source -- )       drop       ;
+: probe-dcon     ( dc-addr -- flag ) drop false ;
+[then]
 
 : timing  ( -- adr )
    dcon? tft-mode? and  if  timing-dcon  else  timing-1024x768  then
@@ -170,13 +183,6 @@ h# 4c00.0015 constant dotpll
    then                             ( dotpll-hi )
    set-dotpll                       ( )
 ;
-
-[ifndef] dcon-gpio-init
-false to dcon?
-false constant atest?
-\ : tft-mode?  ( -- flag )  h# c000.2001 msr@  drop h# 40 and  0<>  ;
-false constant tft-mode?
-[then]
 
 \ This compensates for a PCB miswiring between the GX and the DCON
 : set-gamma  ( -- )
@@ -417,85 +423,12 @@ previous definitions
 
 \ fload ${BP}/dev/mediagx/video/bitblt.fth
 
-[ifdef] dcon-gpio-init
-
-\ This is a horrible hack to get the DCON PLL started.
-\ What is going on is that you have to start the video timing
-\ generator assuming that the DCON is present, i.e. with 1200x900
-\ timing parameters.  Then you try to turn on the DCON, and check
-\ to see if you get a DCON interrupt at the right video scan line.
-\ If not, you try again.  And again.  Eventually you give up.
-
-\ Each iteration of the loop below takes 2.5 us (measured).
-\ A frame is 1/50 sec, or 20 ms.  If we spin for 25 ms, we are
-\ sure to see scanline 905.  So we use a little longer than 25 ms,
-\ just to be safe.
-d# 12,000  constant scanline-spins
-
-: irq@905?  ( -- dcon? )
-   lock[
-   false
-   scanline-spins 0 do
-      h# 6e dc-base + w@ h# 7ff and d# 905 =  if
-         gpio-data@  dconirq and  0<>       ( false dcon? )
-         nip
-         leave
-      then
-   loop
-   ]unlock
-;
-
-: good-dcon?  ( -- flag )
-   atest?  if    \ A-test boards don't need this PLL kick
-      0 ['] dcon@ catch  if  drop  smb-init  false exit  then
-      wbsplit nip  h# dc =    ( flag )
-      exit  
-   then
-
-   dcon2?  if  true exit  then
-
-   \ Scan line enable (100), color swizzling (20),
-   \ blanking (10), pass thru disable (1)
-   h# 131    1 ['] dcon! catch  if  2drop smb-init  false exit  then  \ Mode
-   h#   0    9 ['] dcon! catch  if  2drop smb-init  false exit  then  \ Mode
-   d# 19 0  do
-      h# cc h# 4b ['] dcon! catch  if  2drop smb-init  then  \ PLL
-   loop
-   h# cc h# 4b ['] dcon! catch  if  2drop smb-init  false exit  then  \ PLL
-
-   irq@905?                     ( flag )
-;
-
-: dcon-restart  ( -- )
-   dcon-gpio-init
-   d# 50 0  do
-      good-dcon?  if  dcon-setup  h# 11 mode!  leave  then
-   loop
-   set-mode
-;
-
-: probe-dcon  ( -- )
-   true to dcon?  set-mode
-   dcon-gpio-init   \ GPIO stuff
-   d# 50 0  do
-      good-dcon?  if  dcon-enable  maybe-set-cmos  unloop exit  then
-   loop
-   
-   0 dcon-flag cmos!
-   false to dcon?
-;
-[else]
-: probe-dcon  ( -- ) ;
-: smb-init ;
-: smb-off ;
-[then]
-
 : init-controller  ( -- )
-\   " dcon-present?" evaluate to dcon?
    unlock
    video-off
-   
-   probe-dcon
+
+   true to dcon?  set-mode
+   dc-base probe-dcon to dcon?
 
    \ If we have decided that the DCON is not present, we have to
    \ change the mode back to VGA timing and resolution
@@ -571,7 +504,6 @@ headers
 0 instance value graphmem
 
 : init-all  ( -- )		\ Initializes the controller
-   smb-init
    map-io-regs			\ Enable IO registers
    init-controller		\ Setup the video controller
    declare-props		\ Setup properites
@@ -589,13 +521,38 @@ headers
    frame-buffer-adr /fb +  to graphmem
 ;
 
-: display-remove  ( -- )
-   smb-off
-;
-
 " display"                      device-type
 " ISO8859-1" encode-string    " character-set" property
 0 0  encode-bytes  " iso6429-1983-colors"  property
+
+new-device
+   " ports" device-name
+   1 " #address-cells" integer-property
+   0 " #size-cells" integer-property
+
+   : decode-unit  ( adr len -- phys )  $number  if  0  then  ;
+   : encode-unit  ( phys -- adr len )  (u.)  ;
+   : open  ( -- true )  true  ;
+   : close  ( -- )  ;
+
+   \ VGA port
+   new-device
+      " port" device-name
+      0 " reg" integer-property
+      new-device
+         " endpoint" device-name
+      finish-device
+   finish-device
+
+   \ LCD port
+   new-device
+      " port" device-name
+      1 " reg" integer-property
+      new-device
+         " endpoint" device-name
+      finish-device
+   finish-device
+finish-device
 
 \ LICENSE_BEGIN
 \ Copyright (c) 2006 FirmWorks

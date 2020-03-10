@@ -4,6 +4,15 @@ purpose: Load device drivers according to configuration definitions
 : gx?  ( -- flag )  h# 4c000017 msr@ drop  4 rshift  2 =  ;
 : lx?  ( -- flag )  h# 4c000017 msr@ drop  4 rshift  3 =  ;
 
+\ This depends on a jumper on the board
+: tft-mode?  ( -- flag )
+   gx?  if
+      h# c000.2001 msr@  drop h# 40 and  0<>
+   else
+      true
+   then
+;
+
 fload ${BP}/dev/geode/msr.fth
 fload ${BP}/cpu/x86/pc/isaio.fth
 
@@ -256,6 +265,7 @@ fload ${BP}/ofw/core/muxdev.fth          \ I/O collection/distribution device
 
 \needs md5init  fload ${BP}/ofw/ppp/md5.fth                \ MD5 hash
 
+fload ${BP}/dev/geode/gpio.fth           \ Rudimentary GPIO driver
 fload ${BP}/dev/geode/acpi.fth           \ Power management
 
 fload ${BP}/dev/olpc/spiflash/memflash.fth \ Memory-mapped FLASH access
@@ -270,6 +280,10 @@ fload ${BP}/dev/olpc/spiflash/spiflash.fth \ SPI FLASH programming
 fload ${BP}/dev/olpc/kb3700/ecspi.fth      \ EC chip SPI FLASH access
 fload ${BP}/dev/olpc/kb3700/ecserial.fth   \ Serial access to EC chip
 fload ${BP}/dev/olpc/kb3700/ecio.fth       \ I/O space access to EC chip
+
+dev /embedded-controller
+" olpc,xo1-ec" +compatible
+dend
 
 fload ${BP}/cpu/x86/pc/olpc/boardrev.fth   \ Board revision decoding
 
@@ -328,9 +342,15 @@ fload ${BP}/cpu/x86/pc/olpc/gpioinit.fth
 fload ${BP}/cpu/x86/pc/olpc/chipinit.fth
 [then]
 
-0 0  " 1,1"  " /pci" begin-package
+0 0   " "  " /isa" begin-package
+   " i2c-bus" device-name
+   1 " #address-cells" integer-property
+   0 " #size-cells" integer-property
    fload ${BP}/dev/olpc/dcon/dconsmb.fth         \ SMB access to DCON chip
    fload ${BP}/dev/olpc/dcon/dcon.fth            \ DCON control
+end-package
+
+0 0  " 1,1"  " /pci" begin-package
    fload ${BP}/dev/geode/display/loadpkg.fth     \ Geode display
 
    0 0 encode-bytes

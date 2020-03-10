@@ -4,7 +4,7 @@
 #	      or just: make	
 #
 
-ifneq (arm, $(findstring arm,$(shell uname -p)))
+ifneq (arm, $(findstring arm,$(shell uname -m)))
   # Cross-compiler setup
 ifeq ($(CROSS),)
     CROSS=/usr/local/arm/arm-linux/bin/
@@ -24,8 +24,12 @@ LIBDIR=$(HLIBDIR)/arm
 GLIBDIR=$(dir $(shell $(CC) -print-libgcc-file-name))
 
 INCS=-I. -I$(SRCDIR) -I$(HLIBDIR)
-MODES=-g -O2 -fno-inline
+MODES=-g -O2 -fno-inline -fno-pie
+MODES+=-Wno-implicit-function-declaration
+MODES+=-Wno-implicit-int
 CFLAGS= $(INCS) $(MODES)
+CFLAGS += -Wno-implicit-function-declaration
+CFLAGS += -Wno-implicit-int
 
 ifeq (y, $(shell $(CC) -xc -c -fno-stack-protector /dev/null -o /dev/null 2>/dev/null && echo y))
   CFLAGS += -fno-stack-protector

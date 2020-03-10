@@ -100,7 +100,8 @@ h# 4000.0000 constant lid-pme  \ PME mapper 6
    [ifdef] cleanup-lid-wakeup  cleanup-lid-wakeup  [then]
    resume-ps2
    wlan-reset
-   dcon-power-on  d# 10 ms  " dcon-restart" screen-ih $call-method
+   dcon-power-on  d# 10 ms  " dcon-restart" dcon-ih $call-method
+   " set-mode" screen-ih $call-method
 ;
 ' (suspend-devices) to suspend-devices
 ' (resume-devices) to resume-devices

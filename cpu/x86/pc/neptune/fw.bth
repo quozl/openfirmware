@@ -88,7 +88,6 @@ dev /
 alias lmove lmove			\ Needed by CS5536 NAND FLASH driver
 dend
 
-fload ${BP}/dev/geode/gpio.fth		\ Rudimentary GPIO driver
 fload ${BP}/cpu/x86/pc/neptune/probemem.fth	\ Memory probing
 
 [ifdef] virtual-mode
