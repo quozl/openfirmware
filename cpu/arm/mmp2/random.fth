@@ -37,6 +37,12 @@ purpose: Random numbers using Marvell hardware acceleration
 ;
 alias random random-long
 
+0 0  " d4292c00" " /" begin-package
+   " rng" device-name
+   " marvell,mmp2-rng" +compatible
+   my-address my-space	h# 8 reg
+end-package
+
 stand-init: Random number generator
    h# 1b h# 68 pmua!   \ Ensure WTM clock is enabled
    init-entropy
