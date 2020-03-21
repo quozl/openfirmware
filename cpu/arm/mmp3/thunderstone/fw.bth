@@ -91,7 +91,7 @@ fload ${BP}/cpu/arm/mmp2/watchdog.fth	\ reset-all using watchdog timer
 
 0 0  " d4018000"  " /" begin-package  \ UART3
    fload ${BP}/cpu/arm/mmp2/uart.fth
-   " /apbc" encode-phandle d# 12 encode-int encode+ " clocks" property
+   " /clocks" encode-phandle mmp2-uart2-clk# encode-int encode+ " clocks" property
    d# 24 " interrupts" integer-property
    1 " linux,unit#" integer-property
 end-package
