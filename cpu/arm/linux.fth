@@ -108,6 +108,7 @@ h# 10000 constant /fdt-max
 \   then
    disable-interrupts
    [ifdef] mmp3-gic  no-mmp3-gic? 0=  if  mmp3-gic  then  [then]
+   [ifdef] olpc-compat  olpc-compat?  if  olpc-compat  then  [then]
 
    linux-base linux-base  (init-program)    \ Starting address, SP
    0 to r0

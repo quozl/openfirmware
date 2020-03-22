@@ -328,6 +328,9 @@ fload ${BP}/ofw/core/fdt.fth
 [ifdef] mmp3
    autoload: mmp3-gic-  defines: mmp3-gic
    0 value no-mmp3-gic?
+
+   autoload: olpc-compat-  defines: olpc-compat
+   0 value olpc-compat?
 [then]
 fload ${BP}/cpu/arm/linux.fth
 
