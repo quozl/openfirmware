@@ -474,10 +474,10 @@ d# 1200 d# 26 - value bar-x-last
 ;
 [then]
 
-0 value alternate?
+0 value load-alternate?
 : show-dot  ( -- )
    next-dot-xy to icon-xy  next-dot-xy  d# 16 0 d+  to next-dot-xy    ( )
-   alternate?  if  " yellowdot"  else  " lightdot"  then  show-icon
+   load-alternate?  if  " yellowdot"  else  " lightdot"  then  show-icon
 ;
 
 : show-dev-icon  ( devname$ -- )

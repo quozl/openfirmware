@@ -757,12 +757,19 @@ d# 8192 constant /sec-line-max
 ;
 
 : set-alternate  ( -- )
-   button-o game-key?  if  true to alternate? exit  then
+   button-o game-key?  if  true to load-alternate? exit  then
    h# 82 cmos@  [char] A =  if
       [char] N h# 82 cmos!
-      true to alternate?  exit
+      true to load-alternate?  exit
    then
-   false to alternate?
+   false to load-alternate?
+;
+
+: alternate?  ( -- flag )
+   \ If the boot path inspects the alternate flag we assume it's not
+   \ going to load a very new kernel.
+   [ifdef] olpc-compat  1 to olpc-compat?  [then]
+   load-alternate?
 ;
 
 \ secure-load-ramdisk is called during the process of preparing an
