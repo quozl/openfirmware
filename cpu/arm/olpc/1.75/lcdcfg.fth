@@ -9,6 +9,7 @@ new-device
    " marvell,mmp-vsram" +compatible
    d# 64 " granularity" integer-property
 finish-device
+device-end
 
 fload ${BP}/dev/olpc/panel.fth
 dev /panel
