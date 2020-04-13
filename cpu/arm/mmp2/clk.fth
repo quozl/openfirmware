@@ -48,7 +48,7 @@ d# 10001 constant mmp2-vmeta-clk#
 " marvell,mmp3-clock" +compatible
 [then]
 
-h# d405.0000 encode-int          h# 1000 encode-int encode+
+h# d405.0000 encode-int          h# 2000 encode-int encode+
 h# d428.2800 encode-int encode+  h#  400 encode-int encode+
 h# d401.5000 encode-int encode+  h# 1000 encode-int encode+
 " reg" property
