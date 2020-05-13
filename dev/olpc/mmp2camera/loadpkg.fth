@@ -5,6 +5,7 @@
    my-address my-space  h# 800  reg
    " /clocks" encode-phandle mmp2-ccic0-clk# encode-int encode+ " clocks" property
 [ifdef] mmp3
+   " /clocks" encode-phandle mmp3-camera-pd# encode-int encode+ " power-domains" property
    \ The CCIC interrupt is shared between CCIC1 and CCIC2 on MMP3
    " /interrupt-controller@1cc" encode-phandle " interrupt-parent" property
    1 " interrupts" integer-property

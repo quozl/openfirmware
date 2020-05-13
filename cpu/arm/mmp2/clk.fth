@@ -41,6 +41,7 @@ d# 126 constant mmp3-sdh4-clk#
 
 \ From include/dt-bindings/power/marvell,mmp2.h
 d# 0 constant mmp2-gpu-pd#
+d# 2 constant mmp3-camera-pd#
 
 \ FIXME: Not official clock numbers!
 d# 10000 constant mmp2-audio-clk#
