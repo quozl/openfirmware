@@ -19,7 +19,7 @@ new-device
    " bus" encode-string encode+
    " clock-names" property
 
-   " /clocks" encode-phandle mmp2-gpu-power-domain# encode-int encode+
+   " /clocks" encode-phandle mmp2-gpu-pd# encode-int encode+
    " power-domains" property
 finish-device
 device-end
