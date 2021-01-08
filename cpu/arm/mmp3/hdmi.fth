@@ -169,7 +169,7 @@ hex
    0 swap  2swap                    ( sum  index adr  len )
    0  ?do                           ( sum  index adr  )
       2dup i + c@                   ( sum  index adr  index byte )
-      tuck swap c!                  ( sum  index adr  byte )
+      swap drop                     ( sum  index adr  byte )
       3 roll +  -rot                ( sum' index adr  )
    loop                             ( sum  index adr  )
    drop                             ( sum  index )
