@@ -8,7 +8,7 @@ purpose: MMP3 HDMI driver
       0 0 encode-bytes
          hdmi-hp-det-gpio# 0 encode-gpio
       " gpios" property
-      " /hdmi-i2c" encode-phandle " ddc-i2c-bus" property
+      " i2c6" encode-phandle " ddc-i2c-bus" property
 
       " HDMI" model
 
