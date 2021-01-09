@@ -375,6 +375,10 @@ d# 256 constant /cursor
        " /chosen/framebuffer"  find-package  if  delete-package  then
    ;
 
+[ifdef] mmp3
+fload ${BP}/cpu/arm/mmp3/hdmi.fth
+[then]
+
    : display-install  ( -- )
       map-frame-buffer
       display-on
@@ -382,6 +386,7 @@ d# 256 constant /cursor
       width  height                           ( width height )
       over char-width / over char-height /    ( width height rows cols )
       /scanline depth fb-install              ( )
+      [ifdef] mmp3  hdisp vdisp ['] start-hdmi catch drop  [then]
       add-simple-framebuffer
    ;
 
@@ -394,9 +399,6 @@ d# 256 constant /cursor
    ' display-remove   is-remove
    ' display-selftest is-selftest
 
-[ifdef] mmp3
-fload ${BP}/cpu/arm/mmp3/hdmi.fth
-[then]
 end-package
 
 devalias screen /display
