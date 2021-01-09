@@ -354,7 +354,6 @@ hex
 \ : dither!  ( n -- )  h# a0 lcd!  ;
 \ : dither-table!  ( n -- )  h# a4 lcd!  ;
 
-d# 16 value tv-bpp
 : init-tv-graphics  ( -- )
    init-tv-clock
 
@@ -366,7 +365,9 @@ d# 16 value tv-bpp
    1    d#  8 +bits  \ DMA enable
 
    h# f d# 16 -bits
-   0    d# 16 +bits  \ Pixel format RGB565
+   bpp d# 32 =  if  h# 4    d# 16 +bits  then	\ Pixel format RGB8888
+   bpp d# 24 =  if  h# 2    d# 16 +bits  then	\ Pixel format RGB888
+   bpp d# 16 =  if  h# 0    d# 16 +bits  then	\ Pixel format RGB565
 
    7    d#  9 -bits  \ Turn off YUV422PACK, YVYU422P, UYVY422P
 
