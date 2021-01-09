@@ -5,8 +5,9 @@ purpose: MMP3 HDMI driver
       " hdmi" device-name
 
       " mrvl,pxa688-hdmi" +compatible
-      0 0 encode-bytes
-         hdmi-hp-det-gpio# 0 encode-gpio
+      " /gpio" encode-phandle
+         hdmi-hp-det-gpio# encode-int encode+
+         d# 0 encode-int encode+
       " gpios" property
       " i2c6" encode-phandle " ddc-i2c-bus" property
 
