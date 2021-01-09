@@ -83,6 +83,7 @@ create pll-table
   25 ,   3 ,  h# 1171d ,  39 ,  0 ,  h# 2 ,
   27 ,   3 ,  h# 12710 ,  42 ,  0 ,  h# 2 ,
   54 ,   2 ,  h# 12710 ,  42 ,  0 ,  h# 2 ,
+  65 ,   2 ,  h# 12710 ,  50 ,  0 ,  h# 2 ,
   74 ,   2 ,  h# 007e8 ,  57 ,  0 ,  h# 4 ,
  108 ,   1 ,  h# 1247d ,  42 ,  0 ,  h# 2 ,
  148 ,   1 ,  h# 007e8 ,  57 ,  0 ,  h# 4 ,
@@ -212,6 +213,7 @@ decimal
 \ 2880 ,  288 , 50 , 3456 , 576 ,  312 ,  24 ,  54 , 28 , ???
 \ 2880 ,  480 , 60 , 3432 , 552 ,  525 ,  45 , 108 , 36 , ???
 \ 2880 ,  576 , 50 , 3456 , 576 ,  625 ,  49 , 108 , 38 , ???
+  1024 ,  768 , 60 , 1344 , 320 ,  806 ,  38 ,  65 ,  0 , 136 ,  24 , 160 ,  6 ,  3 , 29 ,
 -1 ,
 hex
 
@@ -269,8 +271,11 @@ hex
    idrv h# 1111 *     0 +bits
    phy-cfg1!
 ;
+
 : setup-fifo  ( -- )
-   1     h#  3a hdmi-i!     \ HDMI, not DCI, Mode.  No pixel repetition
+   8 res@  if  1  else  0  then
+         h#  3a hdmi-i!     \ HDMI or DVI
+
    1     h#  48 hdmi-i!     \ DC_FIFO_WR_PTR  \ Alt value:  0
    h# 1a h#  49 hdmi-i!     \ DC_FIFO_RD_PTR  \ Alt value: 1f
 
