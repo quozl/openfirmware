@@ -123,6 +123,7 @@ dev /sdhci@d4281000  \ MMC3 - Internal eMMC
    d# 31 " mrvl,clk-delay-cycles" integer-property
    0 0 encode-bytes " no-1-8-v" property
 [ifdef] en-emmc-pwr-gpio#
+   " /fixedregulator1" encode-phandle " vmmc-supply" property
    \ Active low
    " /gpio" encode-phandle  en-emmc-pwr-gpio# encode-int encode+  1 encode-int encode+  " power-gpios"  property
 [then]

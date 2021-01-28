@@ -316,6 +316,17 @@ end-package
    " /gpio" encode-phandle wlan-reset-gpio# encode-int encode+ d# 0 encode-int encode+ " reset-gpios" property
 end-package
 
+[ifdef] en-emmc-pwr-gpio#
+0 0  " "  " /" begin-package
+   " fixedregulator1" device-name
+   " regulator-fixed" +compatible
+   " emmc" " regulator-name" string-property
+   d# 3300000 " regulator-min-microvolt" integer-property
+   d# 3300000 " regulator-max-microvolt" integer-property
+   " /gpio" encode-phandle en-emmc-pwr-gpio# encode-int encode+ d# 1 encode-int encode+ " gpio" property
+end-package
+[then]
+
 fload ${BP}/cpu/arm/olpc/sdhci.fth
 
 devalias net /wlan
