@@ -8,17 +8,14 @@ purpose: Common instructions for fetching and building CForth
 
 " ${CFORTH_BUILD_DIR}/Makefile" expand$ $file-exists?  0=  [if]
    " ${CFORTH_VERSION}" expand$ " modify" $=  [if]
-      " git clone -q git+ssh://dev.laptop.org/git/users/wmb/cforth" expand$ $sh
+      " git clone -q git@github.com:MitchBradley/cforth" expand$ $sh
    [else]
       " ${CFORTH_VERSION}" expand$ " clone" $=  [if]
-         " git clone -q git://dev.laptop.org/users/wmb/cforth" expand$ $sh
+         " git clone -q https://github.com/MitchBradley/cforth" expand$ $sh
       [else]   
-         " wget -q -O - http://dev.laptop.org/git/users/wmb/cforth/snapshot/cforth-${CFORTH_VERSION}.tar.gz | tar xfz -" expand$ $sh
-         " mv cforth-${CFORTH_VERSION} cforth" expand$ $sh
-         " wget -q -O - http://dev.laptop.org/git/users/wmb/cforth/patch | head -1 | cut -f 2 -d ' ' >>${CFORTH_BUILD_DIR}/version" expand$ $sh
-         \ " echo -n const char cforth_version[] = '""' >${CFORTH_BUILD_DIR}/cforth_version.c" expand$ $sh
-         \ " wget -q -O - http://dev.laptop.org/git/users/wmb/cforth/patch | head -1 | cut -f 2 -d ' ' >>${CFORTH_BUILD_DIR}/cforth_version.c" expand$ $sh
-         \ " echo '"";' >>${CFORTH_BUILD_DIR}/cforth_version.c" expand$ $sh
+         " mkdir -p cforth" $sh
+         " wget -q -O - https://github.com/MitchBradley/cforth/archive/${CFORTH_VERSION}/cforth-${CFORTH_VERSION}.tar.gz | tar xfz - --strip-components=1 -C cforth" expand$ $sh
+         " wget -q -O - https://github.com/MitchBradley/cforth/commit/${CFORTH_VERSION}.patch | head -1 | cut -f 2 -d ' ' >>${CFORTH_BUILD_DIR}/version" expand$ $sh
       [then]
    [then]
 [then]

@@ -12,7 +12,9 @@ purpose: USB features common to most OLPC ARM platforms
    " /clocks" encode-phandle mmp2-usb-clk# encode-int encode+ " clocks" property
    d# 44 " interrupts" integer-property
 
+[ifdef] usb-hub-reset-gpio#
    usb-hub-reset-gpio# 1  " usb-hub-reset-gpios" gpio-property
+[then]
 
    " usb" " phy-names" string-property
    " /usb2-phy" encode-phandle " phys" property
@@ -40,6 +42,11 @@ defer reset-usb-hub ' noop to reset-usb-hub
    h# 9 h# 5c pmua!  \ Enable clock to USB block
    reset-usb-hub
    " /usb2-phy" " init" execute-device-method drop
+
+[ifndef] olpc
+   h# 1b h# f8 pmua!  \ Enable clock to HSIC1 block
+   " /hsic-phy@f0001800" " init" execute-device-method drop
+[then]
 ;
 
 stand-init: Init USB Phy

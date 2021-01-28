@@ -91,13 +91,14 @@ fload ${BP}/ofw/fs/dropinfs.fth
 \ This devalias lets us say, for example, "dir rom:"
 devalias rom     /dropin-fs
 
+[ifdef] mmp3
+fload ${BP}/cpu/arm/mmp3/l2cache.fth
+fload ${BP}/cpu/arm/mmp3/cpunode.fth
+fload ${BP}/cpu/arm/mmp3/scu.fth
+[else]
+fload ${BP}/cpu/arm/mmp2/l2cache.fth
 fload ${BP}/cpu/x86/pc/cpunode.fth  \ The PC CPU node is actually fairly generic
-
-0 0  " "  " /" begin-package
-   " l2-cache" device-name
-   " marvell,tauros2-cache" +compatible
-   3 " marvell,tauros2-cache-features" integer-property
-end-package
+[then]
 
 : cpu-mhz  ( -- n )
    " /cpu@0" find-package drop	( phandle )
@@ -110,35 +111,51 @@ fload ${BP}/cpu/arm/mmp2/watchdog.fth	\ reset-all using watchdog timer
 fload ${BP}/cpu/arm/olpc/smbus.fth         \ Bit-banged SMBUS (I2C) using GPIOs
 
 fload ${BP}/cpu/arm/olpc/gpio-i2c.fth
-fload ${BP}/cpu/arm/olpc/twsi-i2c.fth
 
-0 0  " d4018000"  " /" begin-package  \ UART3
-   fload ${BP}/cpu/arm/mmp2/uart.fth
-   " /clocks" encode-phandle mmp2-uart2-clk# encode-int encode+ " clocks" property
-   d# 24 " interrupts" integer-property
-end-package
+\ The unit# properties are chosen so that GPIO I2C nodes get lower addresses.
+\ Some Linux drivers expect to find devices on specific I2C bus numbers.
+fload ${BP}/cpu/arm/mmp2/twsi-i2c.fth
+devalias i2c2 /i2c@d4011000
+dev /i2c@d4011000
+   2 " linux,unit#" integer-property
+device-end
+devalias i2c3 /i2c@d4031000
+dev /i2c@d4031000
+   3 " linux,unit#" integer-property
+   new-device
+      fload ${BP}/dev/ds1338.fth
+   finish-device
+device-end
+dev /i2c@d4032000
+   " disabled" " status" string-property
+device-end
+devalias i2c5 /i2c@d4033000
+dev /i2c@d4033000
+   5 " linux,unit#" integer-property
+device-end
+dev /i2c@d4033800
+   " disabled" " status" string-property
+device-end
+devalias i2c4 /i2c@d4034000
+dev /i2c@d4034000
+   4 " linux,unit#" integer-property
+device-end
 
-0 0  " d4017000"  " /" begin-package  \ UART2
-   fload ${BP}/cpu/arm/mmp2/uart.fth
-   " /clocks" encode-phandle mmp2-uart1-clk# encode-int encode+ " clocks" property
-   d# 28 " interrupts" integer-property
-end-package
+[ifdef] soon-olpc-cl2  \ this breaks cl4-a1 boards, which ofw calls cl2.
+dev /i2c@d4033000  \ TWSI4
+new-device
+   h# 30 1 reg
+   " touchscreen" name
+   " raydium_ts" +compatible
+finish-device
+device-end
+[then]
 
-devalias com1 /uart
+fload ${BP}/cpu/arm/mmp2/uart.fth
+
+devalias com1 /uart@d4017000
 : com1  " com1"  ;
 ' com1 is fallback-device   
-
-0 0  " d4030000"  " /" begin-package  \ UART1
-   fload ${BP}/cpu/arm/mmp2/uart.fth
-   d# 27 " interrupts" integer-property
-   " /clocks" encode-phandle mmp2-uart0-clk# encode-int encode+ " clocks" property
-end-package
-
-0 0  " d4016000"  " /" begin-package  \ UART4
-   fload ${BP}/cpu/arm/mmp2/uart.fth
-   " /clocks" encode-phandle mmp2-uart3-clk# encode-int encode+ " clocks" property
-   d# 46 " interrupts" integer-property
-end-package
 
 \needs md5init  fload ${BP}/ofw/ppp/md5.fth                \ MD5 hash
 
@@ -264,7 +281,17 @@ fload ${BP}/cpu/x86/pc/olpc/setwp.fth
    d# 26 " interrupts" integer-property
 end-package
 
+fload ${BP}/cpu/arm/olpc/lcdcfg.fth
 fload ${BP}/cpu/arm/olpc/lcd.fth
+
+[ifdef] use-small-font
+create cp881-16  " ${BP}/ofw/termemu/cp881-16.obf" $file,
+' cp881-16 to romfont
+[else]
+create 15x30pc  " ${BP}/ofw/termemu/15x30pc.psf" $file,
+' 15x30pc to romfont
+[then]
+
 [ifdef] mmp2
 fload ${BP}/cpu/arm/mmp2/galcore.fth
 [then]
@@ -289,6 +316,17 @@ end-package
    " /gpio" encode-phandle wlan-reset-gpio# encode-int encode+ d# 0 encode-int encode+ " reset-gpios" property
 end-package
 
+[ifdef] en-emmc-pwr-gpio#
+0 0  " "  " /" begin-package
+   " fixedregulator1" device-name
+   " regulator-fixed" +compatible
+   " emmc" " regulator-name" string-property
+   d# 3300000 " regulator-min-microvolt" integer-property
+   d# 3300000 " regulator-max-microvolt" integer-property
+   " /gpio" encode-phandle en-emmc-pwr-gpio# encode-int encode+ d# 1 encode-int encode+ " gpio" property
+end-package
+[then]
+
 fload ${BP}/cpu/arm/olpc/sdhci.fth
 
 devalias net /wlan
@@ -301,6 +339,9 @@ fload ${BP}/ofw/core/fdt.fth
 [ifdef] mmp3
    autoload: mmp3-gic-  defines: mmp3-gic
    0 value no-mmp3-gic?
+
+   autoload: olpc-compat-  defines: olpc-compat
+   0 value olpc-compat?
 [then]
 fload ${BP}/cpu/arm/linux.fth
 
@@ -373,7 +414,6 @@ fload ${BP}/cpu/x86/adpcm.fth            \ ADPCM decoding
 d# 32 is playback-volume
 
 fload ${BP}/cpu/arm/olpc/sound.fth
-fload ${BP}/cpu/arm/olpc/rtc.fth
 stand-init: RTC
    " /i2c@d4031000/rtc" open-dev  clock-node !
    \ use RTC 32kHz clock as SoC external slow clock
@@ -405,8 +445,8 @@ warning @ warning off
       ['] ec-name$  catch  0=  if  " ec-name" string-property  then
       ['] ec-date$  catch  0=  if  " ec-date" string-property  then
       ['] ec-user$  catch  0=  if  " ec-user" string-property  then
-      " /interrupt-controller" encode-phandle " interrupt-parent" property
-\      " /interrupt-controller"  find-package  if
+      " /interrupt-controller@d4282000" encode-phandle " interrupt-parent" property
+\      " /interrupt-controller@d4282000"  find-package  if
 \         " interrupt-parent" integer-property
 \      then
       0 0 " ranges" property

@@ -5,7 +5,9 @@ purpose: MMP2 clock management
 d#  27 constant mmp2-usb-pll-clk#
 d#  60 constant mmp2-twsi0-clk#
 d#  61 constant mmp2-twsi1-clk#
+d#  62 constant mmp2-twsi2-clk#
 d#  63 constant mmp2-twsi3-clk#
+d#  64 constant mmp2-twsi4-clk#
 d#  65 constant mmp2-twsi5-clk#
 d#  66 constant mmp2-gpio-clk#
 d#  68 constant mmp2-rtc-clk#
@@ -16,7 +18,12 @@ d#  76 constant mmp2-uart3-clk#
 d#  77 constant mmp2-ssp0-clk#
 d#  78 constant mmp2-ssp1-clk#
 d#  79 constant mmp2-ssp2-clk#
+d#  80 constant mmp2-ssp3-clk#
 d#  81 constant mmp2-timer-clk#
+d#  82 constant mmp2-thermal0-clk#
+d#  83 constant mmp3-thermal1-clk#
+d#  84 constant mmp3-thermal2-clk#
+d#  85 constant mmp3-thermal3-clk#
 d# 106 constant mmp2-disp0-clk#
 d# 101 constant mmp2-sdh0-clk#
 d# 102 constant mmp2-sdh1-clk#
@@ -25,13 +32,16 @@ d# 104 constant mmp2-sdh3-clk#
 d# 105 constant mmp2-usb-clk#
 d# 112 constant mmp2-ccic0-clk#
 d# 120 constant mmp2-disp0-lcdc-clk#
-d# 121 constant mmp2-gpu-gc-mux-clk#
-d# 122 constant mmp2-gpu-gc-clk#
-d# 123 constant mmp2-gpu-bus-mux-clk#
-d# 124 constant mmp2-gpu-bus-clk#
+d# 121 constant mmp2-usbhsic0-clk#
+d# 122 constant mmp2-usbhsic1-clk#
+d# 123 constant mmp2-gpu-bus-clk#
+d# 124 constant mmp2-gpu-3d-clk#
+d# 125 constant mmp3-gpu-2d-clk#
+d# 126 constant mmp3-sdh4-clk#
 
 \ From include/dt-bindings/power/marvell,mmp2.h
-d# 0 constant mmp2-gpu-power-domain#
+d# 0 constant mmp2-gpu-pd#
+d# 2 constant mmp3-camera-pd#
 
 \ FIXME: Not official clock numbers!
 d# 10000 constant mmp2-audio-clk#
@@ -40,8 +50,11 @@ d# 10001 constant mmp2-vmeta-clk#
 0 0  " "  " /" begin-package
 " clocks" name
 " marvell,mmp2-clock" +compatible
+[ifdef] mmp3
+" marvell,mmp3-clock" +compatible
+[then]
 
-h# d405.0000 encode-int          h# 1000 encode-int encode+
+h# d405.0000 encode-int          h# 2000 encode-int encode+
 h# d428.2800 encode-int encode+  h#  400 encode-int encode+
 h# d401.5000 encode-int encode+  h# 1000 encode-int encode+
 " reg" property
@@ -55,15 +68,17 @@ h# d401.5000 encode-int encode+  h# 1000 encode-int encode+
 1 " #reset-cells" integer-property
 1 " #power-domain-cells" integer-property
 
-\            value   clr-mask  reg
-: twsi0-clk  h#   3  h#  77    h#  04 +apbc ;
-: twsi1-clk  h#   3  h#  77    h#  08 +apbc ;
-: twsi3-clk  h#   3  h#  77    h#  10 +apbc ;
-: twsi5-clk  h#   3  h#  77    h#  80 +apbc ;
-: sdh0-clk   h# 41b  h#  1b    h# 054 +pmua ;
-: sdh1-clk   h#  1b  h#  1b    h# 058 +pmua ;
-: sdh2-clk   h#  1b  h#  1b    h# 0e8 +pmua ;
-: sdh3-clk   h#  1b  h#  1b    h# 0ec +pmua ;
+\            value  clr-mask  reg
+: twsi0-clk  h#  3  h# 77     h# 04 +apbc ;
+: twsi1-clk  h#  3  h# 77     h# 08 +apbc ;
+: twsi2-clk  h#  3  h# 77     h# 0c +apbc ;
+: twsi3-clk  h#  3  h# 77     h# 10 +apbc ;
+: twsi4-clk  h#  3  h# 77     h# 7c +apbc ;
+: twsi5-clk  h#  3  h# 77     h# 80 +apbc ;
+: sdh0-clk   h# 1b  h# 1b     h# 54 +pmua ;
+: sdh1-clk   h# 1b  h# 1b     h# 58 +pmua ;
+: sdh2-clk   h# 1b  h# 1b     h# e8 +pmua ;
+: sdh3-clk   h# 1b  h# 1b     h# ec +pmua ;
 
 : generic-on/off         ( on? value clr-mask reg )
    dup io@               ( on? value clr-mask reg reg-val )
@@ -207,7 +222,9 @@ h# 240 constant audio-sram-pwr
 : on/off  ( on? clock# -- )
    dup mmp2-twsi0-clk#  =  if drop  twsi0-clk generic-on/off  exit then
    dup mmp2-twsi1-clk#  =  if drop  twsi1-clk generic-on/off  exit then
+   dup mmp2-twsi2-clk#  =  if drop  twsi2-clk generic-on/off  exit then
    dup mmp2-twsi3-clk#  =  if drop  twsi3-clk generic-on/off  exit then
+   dup mmp2-twsi4-clk#  =  if drop  twsi4-clk generic-on/off  exit then
    dup mmp2-twsi5-clk#  =  if drop  twsi5-clk generic-on/off  exit then
    dup mmp2-sdh0-clk#   =  if drop  sdh0-clk  generic-on/off  exit then
    dup mmp2-sdh1-clk#   =  if drop  sdh1-clk  generic-on/off  exit then

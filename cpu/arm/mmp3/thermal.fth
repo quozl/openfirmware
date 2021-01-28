@@ -7,16 +7,17 @@ purpose: Driver for the MMP3 thermal sensor
    my-address my-space  h# 1000 reg
 
    d# 11 encode-int " interrupts" property
-   " /interrupt-controller/interrupt-controller@188" encode-phandle " interrupt-parent" property
+   " /interrupt-controller@188" encode-phandle " interrupt-parent" property
+   0 " #thermal-sensor-cells" integer-property
 
-   " /apbc" encode-phandle 
-	34 encode-int encode+
-   " /apbc" encode-phandle encode+
-	36 encode-int encode+
-   " /apbc" encode-phandle encode+
-	37 encode-int encode+
-   " /apbc" encode-phandle encode+
-	38 encode-int encode+ " clocks" property
+   " /clocks" encode-phandle
+      mmp2-thermal0-clk# encode-int encode+
+   " /clocks" encode-phandle encode+
+      mmp3-thermal1-clk# encode-int encode+
+   " /clocks" encode-phandle encode+
+      mmp3-thermal2-clk# encode-int encode+
+   " /clocks" encode-phandle encode+
+      mmp3-thermal3-clk# encode-int encode+ " clocks" property
 
    " THSENS1" encode-string
    " THSENS2" encode-string encode+
@@ -24,6 +25,36 @@ purpose: Driver for the MMP3 thermal sensor
    " THSENS4" encode-string encode+ " clock-names" property
 
 end-package
+
+dev /
+new-device
+   " thermal-zones" device-name
+   new-device
+      " cpu-thermal" device-name
+      d# 1000 " polling-delay" integer-property
+      0 " polling-delay-passive" integer-property
+      " /thermal" encode-phandle " thermal-sensors" property
+      new-device
+         " trips" device-name
+         new-device
+            " cpu-crit" device-name
+            d# 100500 " temperature" integer-property
+            0 " hysteresis" integer-property
+            " critical" " type" string-property
+         finish-device
+         new-device
+            " cpu-hot" device-name
+            d#  85000 " temperature" integer-property
+            0 " hysteresis" integer-property
+            " hot" " type" string-property
+         finish-device
+      finish-device
+      new-device
+         " cooling-maps" device-name
+      finish-device
+   finish-device
+finish-device
+device-end
 
 \ FIXME: characterise the observations using an IR thermometer,
 \ because the datasheet and the registers manual disagree on
@@ -182,7 +213,9 @@ h# 0400.0d00 value ts-watchdog-mask  \ 100.5C
    1 ts@  gc>c  .c.c  \ FIXME: show <n and >n too here
    2 ts@  gc>c  .c.c
    ." cpu: "  cpu-temperature  .c
+[ifdef] .bat-temp
    ." battery: "  .bat-temp  ." C "
+[then]
    pop-base
 ;
 
@@ -208,8 +241,8 @@ string-array tsense-regx-bits
    ," 21=auto_read_en"
 end-string-array
 
-: .tc  ( n -- )
-   dup .
+: .tc  ( n n -- )
+   .
    push-decimal
    gc>c .c.c
    pop-base
@@ -222,9 +255,9 @@ end-string-array
          i tsense-regx-bits count type space
       then
    loop cr
-   4 spaces dup 8 rshift h# f and ." wdog_tshld=" .tc cr
-   4 spaces dup 4 rshift h# f and ." int_tshld=" .tc cr
-   4 spaces dup          h# f and ." temp_value=" .tc cr
+   4 spaces dup dup 8 rshift h# f and ." wdog_tshld=" .tc cr
+   4 spaces dup dup 4 rshift h# f and ." int_tshld=" .tc cr
+   4 spaces dup dup          h# f and ." temp_value=" .tc cr
    drop
 ;
 

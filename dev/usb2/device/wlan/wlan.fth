@@ -117,7 +117,6 @@ false instance value force-open?
 \ Used by the /supplicant support package to perform key handshaking.
 : write-force  ( adr len -- actual )
    tuck					( actual adr len )
-   wrap-msg				( actual adr' len' )
    data-out                             ( actual )
 ;
 

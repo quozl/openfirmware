@@ -119,7 +119,6 @@ h# f1 constant SET_REG
 ;
 
 : pg-init-nic ( -- )
-   true to length-header?
    init-buf
    pg-get-mac-address  2drop
    pg-init-mac
@@ -149,6 +148,13 @@ h# f1 constant SET_REG
    0 ectl0 2 pg-write-reg
 ;
 
+\ Outgoing frames need to be prefixed with a 16-bit little-endian
+\ length header
+: pg-length-header ( adr len -- hdrlen )
+  over le-w!            ( adr )
+  2                     ( hdrlen )
+;
+
 \ Process the length header that's inlined after the frame
 : pg-unwrap-msg  ( adr len -- adr len  )
    over + 4 -           ( len-adr )
@@ -163,6 +169,7 @@ h# f1 constant SET_REG
    ['] pg-start-mac to start-mac
    ['] pg-stop-mac  to stop-mac
    ['] pg-get-mac-address to get-mac-address
+   ['] pg-length-header to length-header
    ['] pg-unwrap-msg to unwrap-msg
    ['] pg-mii@ to mii@
    ['] pg-mii! to mii!

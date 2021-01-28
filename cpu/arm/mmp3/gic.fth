@@ -12,122 +12,104 @@ purpose: Generic Interrupt Controller node for Marvell MMP3
 
   : encode-unit  ( phys -- adr len )  push-hex (u.) pop-base  ;
   : decode-unit  ( adr len -- phys )  push-hex $number if 0  then pop-base  ;
-
-  : make-gmux-node  ( statreg maskreg irq# #irqs )
-     new-device
-     " interrupt-controller" name               ( maskreg statreg irq# #irqs )
-     " mrvl,intc-nr-irqs" integer-property      ( maskreg statreg irq# )
-     0 encode-int  rot encode-int encode+
-     1 encode-int encode+
-     " interrupts" property                     ( maskreg statreg )
-     >r  4 encode-reg  r> 4 encode-reg encode+  " reg" property  ( )
-     " mrvl,mmp3-mux-intc" +compatible
-     0 0 " interrupt-controller" property
-     1 " #interrupt-cells" integer-property
-     " mux status" encode-string
-     " mux mask" encode-string  encode+ " reg-names" property
-     finish-device
-  ;
-
-  \ create mux nodes
-  h# 150 h# 168     4     4 make-gmux-node \ intcmux4 - USB_CHARGER, PMIC, SPMI, CHRG_DTC_OUT
-  h# 154 h# 16c     5     2 make-gmux-node \ intcmux5 - RTC_ALARM, RTC
-  h# 1bc h# 1a4     6     3 make-gmux-node \ intcmux6 - ETHERNET, res, HSI_INT_3
-  h# 1c0 h# 1a8     8     4 make-gmux-node \ intcmux8 - GC2000, res, GC300, MOLTRES_NGIC_2
-  h# 158 h# 170 d# 17     5 make-gmux-node \ intcmux17 - TWSI2,3,4,5,6
-  h# 1c4 h# 1ac d# 18     3 make-gmux-node \ intcmux18 - Res, HSI_INT_2, MOLTRES_NGIC_1
-  h# 1c8 h# 1b0 d# 30     2 make-gmux-node \ intcmux30 - ISP_DMA, DXO_ISP
-  h# 15c h# 174 d# 35 d# 31 make-gmux-node \ intcmux35 - MOLTRES_(various)  (different from MMP2)
-  h# 1cc h# 1b4 d# 42     2 make-gmux-node \ intcmux42 - CCIC2, CCIC1
-  h# 160 h# 178 d# 51     2 make-gmux-node \ intcmux51 - SSP1_SRDY, SSP3_SRDY
-  h# 184 h# 17c d# 55     4 make-gmux-node \ intcmux55 - MMC5, res, res, HSI_INT_1
-  h# 188 h# 180 d# 57 d# 20 make-gmux-node \ intcmux57 - (various)
-  h# 1d0 h# 1b8 d# 58     5 make-gmux-node \ intcmux58 - MSP_CARD, KERMIT_INT_0, KERMIT_INT_1, res, HSI_INT_0
-  h# 128 h# 11c d# 48 d# 24 make-gmux-node \ DMA mux - 16 PDMA, 4 ADMA, 2 VDMA channels
 end-package
 
-dev /
-  " /interrupt-controller@e0001000" encode-phandle " interrupt-parent" property
-dend
+0 0  " e0000600" " /" begin-package
+   " local-timer" device-name
+   " arm,arm11mp-twd-timer" +compatible
+   my-address my-space  h# 20 reg
 
-: irqdef ( irq# -- )
-  0 encode-int
-  rot encode-int encode+
-  4 encode-int encode+
-  " interrupts" property
+   1 encode-int \ Per-processor interrupt
+      d# 13 encode-int encode+
+      h# 301 encode-int encode+ \ GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_EDGE_RISING
+      " interrupts" property
+end-package
+
+0 0  " e0000620" " /" begin-package
+   " watchdog" device-name
+   " arm,arm11mp-twd-wdt" +compatible
+   my-address my-space  h# 20 reg
+
+   1 encode-int \ Per-processor interrupt
+      d# 14 encode-int encode+
+      h# 301 encode-int encode+ \ GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_EDGE_RISING
+      " interrupts" property
+end-package
+
+: gicparent ( -- )
+   " interrupt-parent" delete-property
+   " /interrupt-controller@e0001000" encode-phandle " interrupt-parent" property
 ;
 
-: irqdef2 ( irq# irq# -- )
-  swap
-  0 encode-int
-  rot encode-int encode+
-  1 encode-int encode+
-  0 encode-int encode+
-  rot encode-int encode+
-  1 encode-int encode+
-  " interrupts" property
+dev /                           gicparent  dend
+dev /interrupt-controller@128   gicparent  dend
+dev /interrupt-controller@150   gicparent  dend
+dev /interrupt-controller@154   gicparent  dend
+dev /interrupt-controller@158   gicparent  dend
+dev /interrupt-controller@15c   gicparent  dend
+dev /interrupt-controller@160   gicparent  dend
+dev /interrupt-controller@184   gicparent  dend
+dev /interrupt-controller@188   gicparent  dend
+dev /interrupt-controller@1bc   gicparent  dend
+dev /interrupt-controller@1c0   gicparent  dend
+dev /interrupt-controller@1c4   gicparent  dend
+dev /interrupt-controller@1c8   gicparent  dend
+dev /interrupt-controller@1cc   gicparent  dend
+dev /interrupt-controller@1d0   gicparent  dend
+
+: irqdef ( irq# -- )
+   " interrupts" delete-property
+   0 encode-int
+   rot encode-int encode+
+   4 encode-int encode+
+   " interrupts" property
 ;
 
 \ modify irqs to use 3 cells instead of 1
-dev /timer              h# 0d irqdef  dend
-dev /sspa               h# 03 irqdef  dend
-dev /ap-sp              h# 28 irqdef  dend
-dev /usb                h# 2c irqdef  dend
-dev /ec-spi             h# 14 irqdef  dend
-dev /sd/sdhci@d4280000  h# 27 irqdef  dend
-dev /sd/sdhci@d4281000  h# 35 irqdef  dend
-dev /sd/sdhci@d4280800  h# 34 irqdef  dend
-dev /display            h# 29 irqdef  dend
-dev /vmeta              h# 1a irqdef  dend
-dev /flash              h# 00 irqdef  dend
-dev /uart@d4016000      h# 2e irqdef  dend
-dev /uart@d4030000      h# 1b irqdef  dend
-dev /uart@d4017000      h# 1c irqdef  dend
-dev /uart@d4018000      h# 18 irqdef  dend
-dev /i2c@d4011000       h# 07 irqdef  dend
-dev /dma                h# 30 irqdef  dend
-dev /gpio               h# 31 irqdef  dend
+dev /timer                      h# 0d irqdef  dend
+dev /usb@d4208000               h# 2c irqdef  dend
+[ifdef] olpc
+   dev /sspa                    h# 03 irqdef  dend
+   dev /ap-sp                   h# 28 irqdef  dend
+   dev /flash                   h# 00 irqdef  dend
+   dev /ec-spi                  h# 14 irqdef  dend
+[else]
+   dev /spi@d4035000            h# 00 irqdef  dend
+   dev /spi@d4036000            h# 01 irqdef  dend
+   dev /spi@d4037000            h# 14 irqdef  dend
+   dev /spi@d4039000            h# 15 irqdef  dend
+   dev /usb@f0001000            h# 16 irqdef  dend
+[then]
+dev /sd/sdhci@d4280000          h# 27 irqdef  dend
+dev /sd/sdhci@d4280800          h# 34 irqdef  dend
+dev /sd/sdhci@d4281000          h# 35 irqdef  dend
+dev /sd/sdhci@d4281800          h# 36 irqdef  dend
+dev /display                    h# 29 irqdef  dend
+dev /vmeta                      h# 1a irqdef  dend
+dev /uart@d4016000              h# 2e irqdef  dend
+dev /uart@d4030000              h# 1b irqdef  dend
+dev /uart@d4017000              h# 1c irqdef  dend
+dev /uart@d4018000              h# 18 irqdef  dend
+dev /i2c@d4011000               h# 07 irqdef  dend
+dev /dma                        h# 30 irqdef  dend
+dev /gpio                       h# 31 irqdef  dend
+dev /interrupt-controller@128   d# 48 irqdef  dend
+dev /interrupt-controller@150   d#  4 irqdef  dend
+dev /interrupt-controller@154   d#  5 irqdef  dend
+dev /interrupt-controller@158   d# 17 irqdef  dend
+dev /interrupt-controller@15c   d# 35 irqdef  dend
+dev /interrupt-controller@160   d# 51 irqdef  dend
+dev /interrupt-controller@184   d# 55 irqdef  dend
+dev /interrupt-controller@188   d# 57 irqdef  dend
+dev /interrupt-controller@1bc   d#  6 irqdef  dend
+dev /interrupt-controller@1c0   d#  8 irqdef  dend
+dev /interrupt-controller@1c4   d# 18 irqdef  dend
+dev /interrupt-controller@1c8   d# 30 irqdef  dend
+dev /interrupt-controller@1cc   d# 42 irqdef  dend
+dev /interrupt-controller@1d0   d# 58 irqdef  dend
 
-\ modify all mux irq users to not point to ICU node
-dev /sd/sdhci@d4217000
-  " /interrupt-controller@e0001000/interrupt-controller@184" encode-phandle
-  " interrupt-parent" property
-dend
-dev /camera@d420a000
-  " /interrupt-controller@e0001000/interrupt-controller@1cc" encode-phandle
-  " interrupt-parent" property
-dend
-dev /adma@c0ffd800
-  " /interrupt-controller@e0001000/interrupt-controller@128" encode-phandle
-  " interrupt-parent" property
-dend
-dev /adma@c0ffd900
-  " /interrupt-controller@e0001000/interrupt-controller@128" encode-phandle
-  " interrupt-parent" property
-dend
-dev /thermal
-  " /interrupt-controller@e0001000/interrupt-controller@188" encode-phandle
-  " interrupt-parent" property
-dend
-dev /wakeup-rtc
-  " /interrupt-controller@e0001000/interrupt-controller@154" encode-phandle
-  " interrupt-parent" property
-dend
-dev /gpu
-  " /interrupt-controller@e0001000/interrupt-controller@1c0" encode-phandle
-  " interrupt-parent" property
-dend
-dev /i2c@d4034000
-  " /interrupt-controller@e0001000/interrupt-controller@158" encode-phandle
-  " interrupt-parent" property
-dend
-dev /i2c@d4033000
-  " /interrupt-controller@e0001000/interrupt-controller@158" encode-phandle
-  " interrupt-parent" property
-dend
-dev /i2c@d4031000
-  " /interrupt-controller@e0001000/interrupt-controller@158" encode-phandle
-  " interrupt-parent" property
-dend
+\ Enable the TWD timer
+\ PMUA_CC3_PJ |= PJ4_MP_TIMER_RST | PJ4_MP_TIMER_CLK_EN
+standalone? if  h# 18 h# 188 pmua-set  then
 
 : mmp3-gic  ;  \ 92ms

@@ -68,11 +68,9 @@ fload ${BP}/cpu/arm/mmp2/irq.fth
 
 fload ${BP}/cpu/arm/mmp2/watchdog.fth	\ reset-all using watchdog timer
 
-0 0  " d4018000"  " /" begin-package  \ UART3
-   fload ${BP}/cpu/arm/mmp2/uart.fth
-   d# 24 " interrupts" integer-property
-end-package
-devalias com1 /uart
+fload ${BP}/cpu/arm/mmp2/uart.fth
+
+devalias com1 /uart@d4018000
 : com1  " com1"  ;
 ' com1 is fallback-device   
 

@@ -51,7 +51,10 @@ d# 64 constant #levels
 : close  ( -- )  ;
 
 [ifdef] mmp2  " mrvl,mmp2-intc" +compatible   [then]
-[ifdef] mmp3  " mrvl,mmp3-intc" +compatible   [then]
+[ifdef] mmp3
+   " marvell,mmp3-intc" +compatible
+   " mrvl,mmp3-intc" +compatible
+[then]
 " simple-bus" +compatible
 
 0 0 " ranges" property

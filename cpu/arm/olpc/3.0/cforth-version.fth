@@ -10,8 +10,7 @@
 \ You don't need ssh access to the server.
 \ macro: CFORTH_VERSION clone
 
-\ Otherwise, the source code will be will be downloaded as a tarball via gitweb.
-\ macro: CFORTH_VERSION 59859f04454bc2574ab68cf0fd76ebdbc5f26fb6
-macro: CFORTH_VERSION HEAD
+\ Otherwise, the source code will be will be downloaded as a tarball.
+macro: CFORTH_VERSION d111f9ffe1732b706addb08a96d4cba7e26bb93a
 
 macro: CFORTH_BUILD_DIR cforth/build/arm-xo-3.0

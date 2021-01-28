@@ -7,7 +7,11 @@ purpose: Display driver for OLPC ARM/MMP platforms
 
    " mrvl,pxa168fb" +compatible
    " marvell,armada-lcdc" +compatible
+[ifdef] mmp3
+   " marvell,mmp3-lcd" +compatible
+[else]
    " marvell,mmp2-lcd" +compatible
+[then]
 
    " periph" encode-string
    " ext_ref_clk0" encode-string encode+
@@ -23,39 +27,12 @@ purpose: Display driver for OLPC ARM/MMP platforms
       " port" device-name
       new-device
          " endpoint" device-name
-         d# 18 " bus-width" integer-property
+         bpp d# 24 <  if  d# 18 " bus-width" integer-property  then
       finish-device
    finish-device
 
-\ In MMP3, the SCLK_SOURCE_SELECT field moved from bit 30 to bit 29,
-\ so the high nibble changed from 4 (MMP2) to 2 (MMP3) for the same
-\ field value 1.
-[ifdef] mmp3  h# 20001102  [else]  h# 40001102  [then]  value clkdiv  \ Display Clock 1 / 2 -> 56.93 MHz
-
-h# 00000700 value pmua-disp-clk-sel  \ PLL1 / 7 -> 113.86 MHz 
-
-d#    8 value hsync  \ Sync width
-d# 1200 value hdisp  \ Display width
-d# 1256 value htotal \ Display + FP + Sync + BP
-d#   24 value hbp    \ Back porch
-
-d#    3 value vsync  \ Sync width
-d#  900 value vdisp  \ Display width
-d#  912 value vtotal \ Display + FP + Sync + BP
-d#    5 value vbp    \ Back porch
-
 : hfp  ( -- n )  htotal hdisp -  hsync -  hbp -  ;  \ 24
 : vfp  ( -- n )  vtotal vdisp -  vsync -  vbp -  ;  \ 4
-
-2 value #lanes
-2 value bytes/pixel
-d# 16 value bpp
-
-0 [if]  \ 24bpp parameters
-3 to #lanes
-3 to bytes/pixel
-d# 24 to bpp
-[then]
 
 : >bytes   ( pixels -- chunks )  bytes/pixel *  ;
 : >chunks  ( pixels -- chunks )  >bytes #lanes /  ;
@@ -90,16 +67,22 @@ width >bytes constant /scanline
 
    htotal >chunks  vtotal wljoin  h# 114 lcd!  \ SPUT_V_H_TOTAL
 
-   htotal >chunks  hdisp -  hbp >chunks -  6 -  ( low )
-   hbp >chunks  wljoin  h# 11c lcd!
-   
+   hfp >chunks  hbp >chunks  wljoin  h# 11c lcd!
+
    vfp vbp wljoin  h# 120 lcd!
    h# 2000FF00 h# 194 lcd!  \ DMA CTRL 1
-   h# 2000000d h# 1b8 lcd!  \ Dumb panel controller - 18 bit RGB666 on LDD[17:0]
+
+   \ Dumb panel controller - 24 bit RGB888 on LDD[23:0] or 18 bit RGB666 on LDD[17:0]
+   bpp d# 24 >=  if  h# 6000000d  else  h# 2000000d  then h# 1b8 lcd!
+
    h# 01330133 h# 13c lcd!  \ Panel VSYNC Pulse Pixel Edge Control
    clkdiv      h# 1a8 lcd!  \ Clock divider
-\  h# 08021100 h# 190 lcd!  \ DMA CTRL 0 - enable DMA, 24 bpp mode
-   h# 08001100 h# 190 lcd!  \ DMA CTRL 0 - enable DMA, 16 bpp mode
+
+   \ DMA CTRL 0 - enable DMA
+   h# 08001100
+   bpp d# 32 =  if  h# 00040000 or  then
+   bpp d# 24 =  if  h# 00020000 or  then
+   h# 190 lcd!
 ;
 
 : normal-hsv  ( -- )
@@ -127,7 +110,6 @@ width >bytes constant /scanline
    hdisp third - 2/               ( w h x )    \ X centering offset
    vdisp third - 2/               ( w h x y )  \ Y centering offset
    wljoin h# 0e8 lcd!             ( w h )
-
    wljoin dup h# 0ec lcd!         ( h.w )  \ Source size
    h# 0f0 lcd!                    ( )      \ Zoomed size
 ;
@@ -165,7 +147,7 @@ defer foo ' noop to foo
 : start-video  ( adr w h ycrcb? -- )
    >r                                    ( adr w h r: ycrcb? )
    clear-unused-regs  normal-hsv         ( adr w h r: ycrcb? )
-   over  2* h# 0e0 lcd!                  ( adr w h r: ycrcb? )  \ Pitch - width * 2 bytes/pixel for RGB565, width for YCrCr4:2:2
+   over bytes/pixel * h# 0e0 lcd!        ( adr w h r: ycrcb? )  \ Pitch - width * 2 bytes/pixel for RGB565, width for YCrCr4:2:2
    placement                             ( adr r: ycrcb? )
    set-video-dma-adr                     ( r: ycrcb? )  \ Video buffer
    r> if  h# 50.000e  else  0  then  set-video-mode  ( )
@@ -338,10 +320,12 @@ d# 256 constant /cursor
 
    defer init-panel    ' noop to init-panel
 
+   [ifdef] olpc
    \ XXX we really should bounce these through the panel node(s)
    : bright!  " bright!" $call-dcon  ;
    : backlight-off  " backlight-off" $call-dcon  ;
    : backlight-on   " backlight-on" $call-dcon  ;
+   [then]
 
    : display-on
       init-panel  \ Turns on DCON etc
@@ -368,13 +352,16 @@ d# 256 constant /cursor
             " simple-framebuffer" +compatible
 
             fb-mem-va >physical  encode-int
-            vdisp hdisp * 2 *  encode-int encode+
+            vdisp hdisp * bytes/pixel *  encode-int encode+
             " reg" property
 
             hdisp " width" integer-property
             vdisp " height" integer-property
-            hdisp 2 * " stride" integer-property
-            " r5g6b5" " format" string-property
+            hdisp bytes/pixel * " stride" integer-property
+            bpp d# 32 =  if  " a8r8g8b8"  then
+            bpp d# 24 =  if  " r8g8b8"    then
+            bpp d# 16 =  if  " r5g6b5"    then
+            " format" string-property
             " /display" encode-phandle " display" property
 
             " /clocks" encode-phandle mmp2-disp0-clk# encode-int encode+
@@ -388,6 +375,10 @@ d# 256 constant /cursor
        " /chosen/framebuffer"  find-package  if  delete-package  then
    ;
 
+[ifdef] mmp3
+fload ${BP}/cpu/arm/mmp3/hdmi.fth
+[then]
+
    : display-install  ( -- )
       map-frame-buffer
       display-on
@@ -395,6 +386,7 @@ d# 256 constant /cursor
       width  height                           ( width height )
       over char-width / over char-height /    ( width height rows cols )
       /scanline depth fb-install              ( )
+      [ifdef] mmp3  hdisp vdisp ['] start-hdmi catch drop  [then]
       add-simple-framebuffer
    ;
 
@@ -407,22 +399,10 @@ d# 256 constant /cursor
    ' display-remove   is-remove
    ' display-selftest is-selftest
 
-[ifdef] mmp3
-fload ${BP}/cpu/arm/mmp3/hdmi.fth
-[then]
 end-package
 
 devalias screen /display
    
-[ifdef] use-small-font
-create cp881-16  " ${BP}/ofw/termemu/cp881-16.obf" $file,
-' cp881-16 to romfont
-[else]
-create 15x30pc  " ${BP}/ofw/termemu/15x30pc.psf" $file,
-' 15x30pc to romfont
-[then]
-
-
 \ LICENSE_BEGIN
 \ Copyright (c) 2010 FirmWorks
 \ 

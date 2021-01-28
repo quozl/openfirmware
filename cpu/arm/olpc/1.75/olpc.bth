@@ -50,7 +50,7 @@ timh:  TIMH        0 d101f000
 \ Main Processor code loaded into DRAM
 image: OBMI      800 d101c000 ${BP}/cpu/arm/olpc/dummy.img
 \ Secure Processor code loaded into SRAM
-image: WTMI     1000 d1018000 shim.img
+image: WTMI     1000 d1019000 shim.img
 image: CFTH     2000 d1000000 cforth.img
 reserved:
   term:

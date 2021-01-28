@@ -108,6 +108,7 @@ h# 10000 constant /fdt-max
 \   then
    disable-interrupts
    [ifdef] mmp3-gic  no-mmp3-gic? 0=  if  mmp3-gic  then  [then]
+   [ifdef] olpc-compat  olpc-compat?  if  olpc-compat  then  [then]
 
    linux-base linux-base  (init-program)    \ Starting address, SP
    0 to r0
@@ -167,7 +168,7 @@ defer place-ramdisk
 : init-zimage?   ( -- flag )
    loaded                               ( adr len )
    dup h# 30 <  if  2drop false exit  then   ( adr len )
-   over h# 24 + l@  h# 016f2818  <>  if  drop false exit  then   ( adr len )
+   over h# 24 + l@  h# 016f2818  <>  if  2drop false exit  then   ( adr len )
    swap >r                              ( len r: adr )
    r@ h# 28 + l@  r@ +                  ( len start r: adr )
    swap r> drop                         ( start len )

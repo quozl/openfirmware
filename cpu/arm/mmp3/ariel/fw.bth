@@ -1,0 +1,13 @@
+purpose: Build OFW Forth dictionary for Dell Ariel (Wyse 3020)
+
+dictionary: ${BP}/cpu/arm/mmp3/ariel/build/prefw.dic
+command: &armforth &dictionary &this
+build-now
+
+" fw.tag" r/w create-file drop  tag-file !
+
+fload ${BP}/cpu/arm/mmp3/ariel/build-fw.fth
+
+h# d4018000 to uart-base
+
+fload ${BP}/cpu/arm/olpc/save-fw.fth

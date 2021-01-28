@@ -12,7 +12,7 @@ headers
 
    dup reset-port				( port )
 
-   port-speed					( port speed )
+   1+ port-speed				( port speed )
 
    \ hub-port and hub-dev route USB 1.1 transactions through USB 2.0 hubs
    over get-hub20-port  get-hub20-dev		( port speed hub-port hub-dev )

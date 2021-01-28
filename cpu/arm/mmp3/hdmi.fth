@@ -5,10 +5,11 @@ purpose: MMP3 HDMI driver
       " hdmi" device-name
 
       " mrvl,pxa688-hdmi" +compatible
-      0 0 encode-bytes
-         hdmi-hp-det-gpio# 0 encode-gpio
+      " /gpio" encode-phandle
+         hdmi-hp-det-gpio# encode-int encode+
+         d# 0 encode-int encode+
       " gpios" property
-      " /hdmi-i2c" encode-phandle " ddc-i2c-bus" property
+      " i2c6" encode-phandle " ddc-i2c-bus" property
 
       " HDMI" model
 
@@ -83,6 +84,7 @@ create pll-table
   25 ,   3 ,  h# 1171d ,  39 ,  0 ,  h# 2 ,
   27 ,   3 ,  h# 12710 ,  42 ,  0 ,  h# 2 ,
   54 ,   2 ,  h# 12710 ,  42 ,  0 ,  h# 2 ,
+  65 ,   2 ,  h# 12710 ,  50 ,  0 ,  h# 2 ,
   74 ,   2 ,  h# 007e8 ,  57 ,  0 ,  h# 4 ,
  108 ,   1 ,  h# 1247d ,  42 ,  0 ,  h# 2 ,
  148 ,   1 ,  h# 007e8 ,  57 ,  0 ,  h# 4 ,
@@ -169,7 +171,7 @@ hex
    0 swap  2swap                    ( sum  index adr  len )
    0  ?do                           ( sum  index adr  )
       2dup i + c@                   ( sum  index adr  index byte )
-      tuck swap c!                  ( sum  index adr  byte )
+      swap drop                     ( sum  index adr  byte )
       3 roll +  -rot                ( sum' index adr  )
    loop                             ( sum  index adr  )
    drop                             ( sum  index )
@@ -212,6 +214,7 @@ decimal
 \ 2880 ,  288 , 50 , 3456 , 576 ,  312 ,  24 ,  54 , 28 , ???
 \ 2880 ,  480 , 60 , 3432 , 552 ,  525 ,  45 , 108 , 36 , ???
 \ 2880 ,  576 , 50 , 3456 , 576 ,  625 ,  49 , 108 , 38 , ???
+  1024 ,  768 , 60 , 1344 , 320 ,  806 ,  38 ,  65 ,  0 , 136 ,  24 , 160 ,  6 ,  3 , 29 ,
 -1 ,
 hex
 
@@ -269,8 +272,11 @@ hex
    idrv h# 1111 *     0 +bits
    phy-cfg1!
 ;
+
 : setup-fifo  ( -- )
-   1     h#  3a hdmi-i!     \ HDMI, not DCI, Mode.  No pixel repetition
+   8 res@  if  1  else  0  then
+         h#  3a hdmi-i!     \ HDMI or DVI
+
    1     h#  48 hdmi-i!     \ DC_FIFO_WR_PTR  \ Alt value:  0
    h# 1a h#  49 hdmi-i!     \ DC_FIFO_RD_PTR  \ Alt value: 1f
 
@@ -349,7 +355,6 @@ hex
 \ : dither!  ( n -- )  h# a0 lcd!  ;
 \ : dither-table!  ( n -- )  h# a4 lcd!  ;
 
-d# 16 value tv-bpp
 : init-tv-graphics  ( -- )
    init-tv-clock
 
@@ -361,7 +366,9 @@ d# 16 value tv-bpp
    1    d#  8 +bits  \ DMA enable
 
    h# f d# 16 -bits
-   0    d# 16 +bits  \ Pixel format RGB565
+   bpp d# 32 =  if  h# 4    d# 16 +bits  then	\ Pixel format RGB8888
+   bpp d# 24 =  if  h# 2    d# 16 +bits  then	\ Pixel format RGB888
+   bpp d# 16 =  if  h# 0    d# 16 +bits  then	\ Pixel format RGB565
 
    7    d#  9 -bits  \ Turn off YUV422PACK, YVYU422P, UYVY422P
 

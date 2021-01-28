@@ -7,8 +7,9 @@ d# 24 d# 24 2value ulhc
 9 constant grid-w
 9 constant grid-h
 
-d# 128 value #cols \ Good for 1200x900, may be changed
-d# 90 value #rows
+\ The defaults are good for 1200x900
+[ifdef] hdisp  hdisp d# 45 - grid-w /  [else]  d# 128  [then]  value #cols
+[ifdef] vdisp  vdisp d# 90 - grid-h /  [else]  d#  90  [then]  value #rows
 d# 26 constant status-line
 
 : max-grid  ( -- n )  #rows #cols *  ;
